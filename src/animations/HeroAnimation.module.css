@@ -1,0 +1,20 @@
+.hero {
+    animation: movie 120s infinite linear;
+}
+
+@keyframes movie {
+    0% {
+        background-position: 0% 0%;
+        background-size: 200%;
+    }
+
+    50%{
+        background-position: 100% 100%;
+        background-size: 100%;
+    }
+
+    100%{
+        background-position: 0% 0%;
+        background-size: 200%;
+    }
+}
