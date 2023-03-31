@@ -1,6 +1,6 @@
 
 describe("Navbar is mounted", ()=>{
     it("passes", ()=>{
-        expect(1).toBe(3);
+        expect(1).toBe(2);
     })
 })
