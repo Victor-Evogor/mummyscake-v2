@@ -7,6 +7,7 @@ import {
   styled,
   InputBase,
   alpha,
+  Button
 } from "@mui/material";
 import { Box } from "@mui/system";
 import {
@@ -17,6 +18,10 @@ import {
   Notifications,
   Search as SearchIcon,
 } from "@mui/icons-material";
+import { auth, signIn } from "../../firebase";
+import { useEffect } from "react";
+import { useUser } from "../../hooks/user";
+import { onAuthStateChanged } from "firebase/auth";
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -59,6 +64,18 @@ const Search = styled("div")(({ theme }) => ({
 }));
 
 export const NavBar = () => {
+  const { user, setUser } = useUser();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (userCred) => {
+      if (userCred) {
+        setUser(userCred);
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
+
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -90,12 +107,12 @@ export const NavBar = () => {
         </Search>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          <IconButton
+          {user?<><IconButton
             size="large"
             aria-label="show 4 new mails"
             color="inherit"
           >
-            <Badge badgeContent={4} color="error">
+            <Badge badgeContent={user?4:undefined} color="error">
               <Mail />
             </Badge>
           </IconButton>
@@ -104,11 +121,11 @@ export const NavBar = () => {
             aria-label="show 17 new notifications"
             color="inherit"
           >
-            <Badge badgeContent={17} color="error">
+            <Badge badgeContent={user?17:undefined} color="error">
               <Notifications />
             </Badge>
-          </IconButton>
-          <IconButton
+          </IconButton></>:""}
+          {user? <IconButton
             size="large"
             edge="end"
             aria-label="account of current user"
@@ -118,7 +135,10 @@ export const NavBar = () => {
             color="inherit"
           >
             <AccountCircle />
-          </IconButton>
+          </IconButton>: <Button variant="outlined" sx={{
+            color: "white.main",
+            borderColor: "white.main"
+          }} LinkComponent={"a"} href="/log-in">Log In</Button>}
         </Box>
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton
