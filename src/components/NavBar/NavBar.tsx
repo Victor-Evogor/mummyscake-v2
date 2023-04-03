@@ -7,7 +7,7 @@ import {
   styled,
   InputBase,
   alpha,
-  Button
+  Button,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import {
@@ -91,8 +91,13 @@ export const NavBar = () => {
         <Typography
           variant="h6"
           noWrap
-          component="div"
-          sx={{ display: { xs: "none", sm: "block" } }}
+          component="a"
+          sx={{
+            display: { xs: "none", sm: "block" },
+            textDecoration: "none",
+            color: "white.main",
+          }}
+          href="/"
         >
           Mummy&apos;s Cake
         </Typography>
@@ -107,38 +112,55 @@ export const NavBar = () => {
         </Search>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          {user?<><IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
-          >
-            <Badge badgeContent={user?4:undefined} color="error">
-              <Mail />
-            </Badge>
-          </IconButton>
-          <IconButton
-            size="large"
-            aria-label="show 17 new notifications"
-            color="inherit"
-          >
-            <Badge badgeContent={user?17:undefined} color="error">
-              <Notifications />
-            </Badge>
-          </IconButton></>:""}
-          {user? <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-controls={""}
-            aria-haspopup="true"
-            onClick={() => undefined}
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>: <Button variant="outlined" sx={{
-            color: "white.main",
-            borderColor: "white.main"
-          }} LinkComponent={"a"} href="/log-in">Log In</Button>}
+          {user ? (
+            <>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
+                <Badge badgeContent={user ? 4 : undefined} color="error">
+                  <Mail />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={user ? 17 : undefined} color="error">
+                  <Notifications />
+                </Badge>
+              </IconButton>
+            </>
+          ) : (
+            ""
+          )}
+          {user ? (
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={""}
+              aria-haspopup="true"
+              onClick={() => undefined}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          ) : (
+            <Button
+              variant="outlined"
+              sx={{
+                color: "white.main",
+                borderColor: "white.main",
+              }}
+              LinkComponent={"a"}
+              href="/log-in"
+            >
+              Log In
+            </Button>
+          )}
         </Box>
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton
