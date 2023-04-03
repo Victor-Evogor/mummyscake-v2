@@ -3,6 +3,7 @@ import { Home } from "./Pages/Home";
 import { ThemeProvider } from "@mui/material";
 import { themes } from "./themes";
 import { Provider } from "./GlobalStore";
+import { NotFound } from "./Pages/NotFound";
 
 export const App = () => {
   return (
@@ -11,6 +12,7 @@ export const App = () => {
         <Provider>
           <Routes>
             <Route index element={<Home />} />
+            <Route path="*" element={<NotFound/>}/>
           </Routes>
         </Provider>
       </ThemeProvider>
