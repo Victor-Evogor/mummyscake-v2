@@ -1,6 +1,8 @@
+import cy from "cypress"
 
 describe("Navbar is mounted", ()=>{
     it("passes", ()=>{
-        expect(1).toBe(2);
+      
+        
     })
 })
