@@ -18,10 +18,11 @@ import {
   Notifications,
   Search as SearchIcon,
 } from "@mui/icons-material";
-import { auth, signIn } from "../../firebase";
+import { auth} from "../../firebase";
 import { useEffect } from "react";
 import { useUser } from "../../hooks/user";
 import { onAuthStateChanged } from "firebase/auth";
+import { Link } from "react-router-dom";
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -149,17 +150,20 @@ export const NavBar = () => {
               <AccountCircle />
             </IconButton>
           ) : (
+            <Link to="/log-in" style={{
+              textDecoration: "none"
+            }}>
             <Button
               variant="outlined"
+              
               sx={{
                 color: "white.main",
                 borderColor: "white.main",
               }}
-              LinkComponent={"a"}
-              href="/log-in"
             >
               Log In
             </Button>
+            </Link>
           )}
         </Box>
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
