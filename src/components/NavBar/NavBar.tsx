@@ -5,9 +5,10 @@ import {
   Toolbar,
   Typography,
   styled,
-  InputBase,
   alpha,
   Button,
+  Autocomplete,
+  TextField,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import {
@@ -18,8 +19,8 @@ import {
   Notifications,
   Search as SearchIcon,
 } from "@mui/icons-material";
-import { auth} from "../../firebase";
-import { useEffect } from "react";
+import { auth } from "../../firebase";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { useUser } from "../../hooks/user";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
@@ -34,13 +35,14 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   justifyContent: "center",
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledAutoComplete = styled(Autocomplete)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
+    marginLeft: "2rem",
     width: "100%",
     [theme.breakpoints.up("md")]: {
       width: "20ch",
@@ -60,12 +62,31 @@ const Search = styled("div")(({ theme }) => ({
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
-    width: "auto",
+    width: "17rem",
   },
 }));
 
+const mockOptions = [
+  {
+    label: "cake1",
+  },
+  {
+    label: "cake2",
+    id:2
+  },
+  {
+    label: "cake3",
+    id:3
+  },
+  {
+    label: "cake4",
+    id:4
+  },
+];
+
 export const NavBar = () => {
   const { user, setUser } = useUser();
+  const searchInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     onAuthStateChanged(auth, (userCred) => {
@@ -103,12 +124,17 @@ export const NavBar = () => {
           Mummy&apos;s Cake
         </Typography>
         <Search>
-          <SearchIconWrapper>
+        <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
-          <StyledInputBase
+          <StyledAutoComplete
             placeholder="Search…"
-            inputProps={{ "aria-label": "search" }}
+            options={mockOptions}
+            renderInput={(params) => (
+              <TextField {...params}  placeholder="Search a cake" inputRef={searchInput} onClick={event => {
+                console.log(searchInput.current?.value);
+              }} key={params.id}/>
+            )}
           />
         </Search>
         <Box sx={{ flexGrow: 1 }} />
@@ -150,19 +176,21 @@ export const NavBar = () => {
               <AccountCircle />
             </IconButton>
           ) : (
-            <Link to="/log-in" style={{
-              textDecoration: "none"
-            }}>
-            <Button
-              variant="outlined"
-              
-              sx={{
-                color: "white.main",
-                borderColor: "white.main",
+            <Link
+              to="/log-in"
+              style={{
+                textDecoration: "none",
               }}
             >
-              Log In
-            </Button>
+              <Button
+                variant="outlined"
+                sx={{
+                  color: "white.main",
+                  borderColor: "white.main",
+                }}
+              >
+                Log In
+              </Button>
             </Link>
           )}
         </Box>
