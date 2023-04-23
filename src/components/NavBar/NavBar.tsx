@@ -20,10 +20,13 @@ import {
   Search as SearchIcon,
 } from "@mui/icons-material";
 import { auth } from "../../firebase";
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
+import {  useEffect, useRef } from "react";
 import { useUser } from "../../hooks/user";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { Cake } from "../../types/Cake";
+import { GET_ALL_CAKES_NAME } from "../../gql/getAllCakesName.gql";
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -50,6 +53,13 @@ const StyledAutoComplete = styled(Autocomplete)(({ theme }) => ({
   },
 }));
 
+const mockOptions = [
+  {label: "cake 1"},
+  {label: "cake 2"},
+  {label: "cake 3"},
+  {label: "cake 4"},
+]
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -66,27 +76,10 @@ const Search = styled("div")(({ theme }) => ({
   },
 }));
 
-const mockOptions = [
-  {
-    label: "cake1",
-  },
-  {
-    label: "cake2",
-    id:2
-  },
-  {
-    label: "cake3",
-    id:3
-  },
-  {
-    label: "cake4",
-    id:4
-  },
-];
-
 export const NavBar = () => {
   const { user, setUser } = useUser();
   const searchInput = useRef<HTMLInputElement>(null);
+  const { data } = useQuery<{ getAllCakes: Cake[] }>(GET_ALL_CAKES_NAME);
 
   useEffect(() => {
     onAuthStateChanged(auth, (userCred) => {
@@ -129,7 +122,7 @@ export const NavBar = () => {
           </SearchIconWrapper>
           <StyledAutoComplete
             placeholder="Search…"
-            options={mockOptions}
+            options={data? data.getAllCakes.map(cake => ({label: cake.name})):mockOptions}
             renderInput={(params) => (
               <TextField {...params}  placeholder="Search a cake" inputRef={searchInput} onClick={event => {
                 console.log(searchInput.current?.value);
