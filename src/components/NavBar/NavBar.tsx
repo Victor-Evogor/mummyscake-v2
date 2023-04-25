@@ -124,9 +124,7 @@ export const NavBar = () => {
             placeholder="Search…"
             options={data? data.getAllCakes.map(cake => ({label: cake.name})):mockOptions}
             renderInput={(params) => (
-              <TextField {...params}  placeholder="Search a cake" inputRef={searchInput} onClick={event => {
-                console.log(searchInput.current?.value);
-              }} key={params.id}/>
+              <TextField {...params}  placeholder="Search a cake" inputRef={searchInput} key={params.id}/>
             )}
           />
         </Search>
