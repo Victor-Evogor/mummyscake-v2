@@ -9,6 +9,7 @@ import {
   Button,
   Autocomplete,
   TextField,
+  AutocompleteRenderInputParams,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import {
@@ -123,7 +124,7 @@ export const NavBar = () => {
           <StyledAutoComplete
             placeholder="Search…"
             options={data? data.getAllCakes.map(cake => ({label: cake.name})):mockOptions}
-            renderInput={(params) => (
+            renderInput={(params: AutocompleteRenderInputParams) => (
               <TextField {...params}  placeholder="Search a cake" inputRef={searchInput} key={params.id}/>
             )}
           />

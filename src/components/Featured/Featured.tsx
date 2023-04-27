@@ -17,6 +17,7 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_CAKES } from "../../gql/getAllCakesFull.gql";
 import { Cake } from "../../types/Cake";
 import { Skeleton } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const FeaturedItem: FunctionComponent<Cake> = ({
   name,
@@ -24,6 +25,7 @@ const FeaturedItem: FunctionComponent<Cake> = ({
   price,
   size,
   image,
+  id
 }) => {
   return (
     <Grid item xs={4}>
@@ -43,7 +45,7 @@ const FeaturedItem: FunctionComponent<Cake> = ({
           subheader={`${size.diameter} inches in diameter, $${price}`}
         />
         <CardContent>
-          <CardMedia image={`/cakes/${image}`} component="img" alt="" />
+          <Link to={`/cakes/${id}`}><CardMedia image={`/cakes/${image}`} component="img" alt={name} /></Link>
           <Typography minHeight={100} variant="body2" fontSize={"1.2rem"}>
             {description}
           </Typography>
