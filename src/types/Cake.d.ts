@@ -8,7 +8,11 @@ export interface Cake {
     ingredients: string[],
     image: string,
     rating: number,
-    reviews: string[],
+    reviews: {
+        user: string,
+        comment: string,
+        rating: number
+    }[],
     delivery_info: {
         available: boolean,
         shipping_cost: number,

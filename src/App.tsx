@@ -6,6 +6,7 @@ import { Provider } from "./GlobalStore";
 import { NotFound } from "./Pages/NotFound";
 import { SignIn } from "./Pages/SignIn";
 import { CreateAccount } from "./Pages/CreateAccount";
+import { CakePage } from "./Pages/CakePage";
 
 export const App = () => {
   return (
@@ -17,6 +18,7 @@ export const App = () => {
             <Route path="/log-in" element={<SignIn/>}/>
             <Route path="/create-account" element={<CreateAccount/>}/>
             <Route path="*" element={<NotFound/>}/>
+            <Route path="/cakes/:id" element={<CakePage/>}/>
           </Routes>
         </Provider>
       </ThemeProvider>

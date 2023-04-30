@@ -234,7 +234,7 @@ export const Footer = () => {
                         display: "flex",
                         justifyContent: "flex-end"
                       }}>
-                      <Link href="#" underline="hover">CupCakes</Link>
+                      <Link href="#" underline="hover">Careers</Link>
                     </ListItem>
                   </List>
                 </TableCell>

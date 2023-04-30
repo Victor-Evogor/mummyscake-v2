@@ -5,6 +5,9 @@ interface ThemeConfig extends ThemeOptions {
     palette:PaletteOptions & {
         white: {
             main: string,
+        },
+        success: {
+            main: string
         }
     }
 }
@@ -16,6 +19,9 @@ const config: ThemeConfig = {
         },
         white : {
             main: "#FFEECF"
+        },
+        success: {
+            main: "#4BB543"
         }
     }
 }

@@ -28,6 +28,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Cake } from "../../types/Cake";
 import { GET_ALL_CAKES_NAME } from "../../gql/getAllCakesName.gql";
+import { useNavigate } from "react-router-dom"
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -81,6 +82,7 @@ export const NavBar = () => {
   const { user, setUser } = useUser();
   const searchInput = useRef<HTMLInputElement>(null);
   const { data } = useQuery<{ getAllCakes: Cake[] }>(GET_ALL_CAKES_NAME);
+  const navigate = useNavigate()
 
   useEffect(() => {
     onAuthStateChanged(auth, (userCred) => {
@@ -123,10 +125,14 @@ export const NavBar = () => {
           </SearchIconWrapper>
           <StyledAutoComplete
             placeholder="Search…"
-            options={data? data.getAllCakes.map(cake => ({label: cake.name})):mockOptions}
+            options={data? data.getAllCakes.map(cake => ({label: cake.name, id: cake.id})):mockOptions}
             renderInput={(params: AutocompleteRenderInputParams) => (
-              <TextField {...params}  placeholder="Search a cake" inputRef={searchInput} key={params.id}/>
+              <TextField {...params}  placeholder="Search a cake" inputRef={searchInput} key={params.id} onClick={()=> console.log(params.id)}/>
             )}
+            onChange={(_, value)=>{
+              const {id} = value as Pick<Cake, "name"|"id">;
+              navigate(`/cakes/${id}`);
+            }}
           />
         </Search>
         <Box sx={{ flexGrow: 1 }} />

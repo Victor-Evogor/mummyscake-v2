@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_CAKE = gql`
-query GET_CAKE($id: String) {
-  getCake {
+query GET_CAKE($id: ID) {
+  getCake(id: $id) {
     name
     description
     price
@@ -11,7 +11,11 @@ query GET_CAKE($id: String) {
     ingredients
     image
     rating
-    reviews
+    reviews {
+      user
+      rating
+      comment
+    }
     delivery_info {
         available
         shipping_cost
