@@ -141,24 +141,32 @@ export const Footer = () => {
                     <ListItem
                       sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}
                     >
-                      <Link align="right" width="100%" href="#" underline="hover">Birthday Cakes</Link>
+                      <Link href="#" underline="hover">Birthday Cakes</Link>
                     </ListItem>
                     <ListItem sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}>
-                      <Link align="right" width="100%" href="#" underline="hover">Specialty Cakes</Link>
+                      <Link href="#" underline="hover">Specialty Cakes</Link>
                     </ListItem>
                     <ListItem sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}>
-                      <Link align="right" width="100%" href="#" underline="hover">Wedding Cakes</Link>
+                      <Link href="#" underline="hover">Wedding Cakes</Link>
                     </ListItem>
                     <ListItem sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}>
-                      <Link align="right" width="100%" href="#" underline="hover">CupCakes</Link>
+                      <Link href="#" underline="hover">CupCakes</Link>
                     </ListItem>
                   </List>
                 </TableCell>
@@ -167,24 +175,32 @@ export const Footer = () => {
                     <ListItem
                       sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}
                     >
-                      <Link align="right" width="100%" href="#" underline="hover">Pricing</Link>
+                      <Link href="#" underline="hover">Pricing</Link>
                     </ListItem>
                     <ListItem sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}>
-                      <Link align="right" width="100%" href="#" underline="hover">Settings</Link>
+                      <Link href="#" underline="hover">Settings</Link>
                     </ListItem>
                     <ListItem sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}>
-                      <Link align="right" width="100%" href="#" underline="hover">Orders</Link>
+                      <Link href="#" underline="hover">Orders</Link>
                     </ListItem>
                     <ListItem sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}>
-                      <Link align="right" width="100%" href="#" underline="hover">Help</Link>
+                      <Link href="#" underline="hover">Help</Link>
                     </ListItem>
                   </List>
                 </TableCell>
@@ -193,24 +209,32 @@ export const Footer = () => {
                     <ListItem
                       sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}
                     >
-                      <Link align="right" width="100%" href="tel:+2349133240345" underline="hover">+234 913 324 0345</Link>
+                      <Link href="tel:+2349133240345" underline="hover">+234 913 324 0345</Link>
                     </ListItem>
                     <ListItem sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}>
-                      <Link align="right" width="100%" href="#" underline="hover">Satellite Town Road II, Calabar Nigeria</Link>
+                      <Link href="#" underline="hover">Satellite Town Road II, Calabar Nigeria</Link>
                     </ListItem>
                     <ListItem sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}>
-                      <Link align="right" width="100%" href="#" underline="hover">info@mummyscake.com</Link>
+                      <Link href="#" underline="hover">info@mummyscake.com</Link>
                     </ListItem>
                     <ListItem sx={{
                         px: 0,
+                        display: "flex",
+                        justifyContent: "flex-end"
                       }}>
-                      <Link align="right" width="100%" href="#" underline="hover">CupCakes</Link>
+                      <Link href="#" underline="hover">Careers</Link>
                     </ListItem>
                   </List>
                 </TableCell>
