@@ -20,24 +20,35 @@ import {
 import { Box } from "@mui/system";
 import { FunctionComponent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 
 interface Props {
   type: "sign in" | "create account";
   onSubmit: (cred: {
     email: string;
     password: string;
-    username?: string;
+    fullName?: string;
+    phone?: string;
   }) => void;
 }
 
 export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const fullName = useRef<HTMLInputElement>(null);
 
   const [showPassword, setShowPassword] = useState(false);
+  const [phone, setPhone] = useState("+234");
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handlePhoneChange = (
+    newPhone: string
+  ) => {
+    setPhone(newPhone);
+    matchIsValidTel(newPhone);
   };
 
   return (
@@ -49,9 +60,14 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
       }}
     >
       <Container>
-        <Typography variant="h3" my={2} textAlign="center" sx={{
-          textTransform: "capitalize"
-        }}>
+        <Typography
+          variant="h3"
+          my={2}
+          textAlign="center"
+          sx={{
+            textTransform: "capitalize",
+          }}
+        >
           {type}
         </Typography>
         <Divider />
@@ -60,10 +76,18 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
           my={3}
           onSubmit={(e) => {
             e.preventDefault();
-            if (!passwordRef.current?.value || !emailRef.current?.value) return;
+            if (
+              !passwordRef.current?.value ||
+              !emailRef.current?.value ||
+              (type === "create account" ? !fullName.current?.value ||
+              !matchIsValidTel(phone): false)
+            )
+              return;
             const cred = {
               password: passwordRef.current?.value,
               email: emailRef.current?.value,
+              fullName: fullName.current?.value,
+              phone: phone,
             };
             onSubmit(cred);
           }}
@@ -103,6 +127,34 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
                 />
               </FormControl>
             </Grid>
+
+            {type === "create account" ? (
+              <>
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    placeholder=""
+                    label="Full Name"
+                    type="text"
+                    inputRef={fullName}
+                    sx={{
+                      width: "100%",
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <MuiTelInput
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    autoFocus
+                    placeholder="Phone number"
+                  />
+                </Grid>
+              </>
+            ) : (
+              <></>
+            )}
           </Grid>
           <FormGroup>
             <FormControlLabel
