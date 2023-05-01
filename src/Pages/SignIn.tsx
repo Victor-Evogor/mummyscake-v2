@@ -3,6 +3,7 @@ import { NavBar } from "../components/NavBar/NavBar";
 import { AuthForm } from "../components/AuthForm/AuthForm";
 import { Footer } from "../components/Footer/Footer";
 import { signIn } from "../firebase";
+
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useModal } from "../hooks/useModal";
 import { useUser } from "../hooks/user";
@@ -12,6 +13,7 @@ export const SignIn = () => {
   if (user) return <Navigate to="/" />;
   const { setModalItems, setIsModalOpen } = useModal();
   const navigate = useNavigate();
+
 
 
   const onSubmit = ({
@@ -35,7 +37,9 @@ export const SignIn = () => {
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 Try <Link to="/create-account">creating an account</Link>
               </Typography>
+
               <Typography sx={{ mt: 2 }}>Or recover an account</Typography>
+
             </>
           );
           setIsModalOpen(true);
