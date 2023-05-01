@@ -27,3 +27,6 @@ cypress/videos
 cypress/screenshots
 cypress/downloads
 cakes.mock.json
+
+yarn.lock
+package-lock.json

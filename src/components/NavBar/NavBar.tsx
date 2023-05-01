@@ -20,10 +20,8 @@ import {
   Notifications,
   Search as SearchIcon,
 } from "@mui/icons-material";
-import { auth } from "../../firebase";
-import {  useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useUser } from "../../hooks/user";
-import { onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Cake } from "../../types/Cake";
@@ -79,20 +77,10 @@ const Search = styled("div")(({ theme }) => ({
 }));
 
 export const NavBar = () => {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   const searchInput = useRef<HTMLInputElement>(null);
   const { data } = useQuery<{ getAllCakes: Cake[] }>(GET_ALL_CAKES_NAME);
   const navigate = useNavigate()
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (userCred) => {
-      if (userCred) {
-        setUser(userCred);
-      } else {
-        setUser(null);
-      }
-    });
-  }, []);
 
   return (
     <AppBar position="sticky">
