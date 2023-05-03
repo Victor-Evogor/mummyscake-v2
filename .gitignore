@@ -30,3 +30,5 @@ cakes.mock.json
 
 yarn.lock
 package-lock.json
+
+src/environment.json
