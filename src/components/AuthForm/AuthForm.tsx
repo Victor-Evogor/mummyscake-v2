@@ -5,9 +5,6 @@ import {
   Paper,
   TextField,
   Typography,
-  FormControlLabel,
-  FormGroup,
-  Checkbox,
   Grid,
   Button,
   ButtonGroup,
@@ -21,6 +18,8 @@ import { Box } from "@mui/system";
 import { FunctionComponent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
+import { signInWithGoogle } from "../../firebase";
+import { toast } from "react-toastify";
 
 interface Props {
   type: "sign in" | "create account";
@@ -44,9 +43,7 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
     setShowPassword(!showPassword);
   };
 
-  const handlePhoneChange = (
-    newPhone: string
-  ) => {
+  const handlePhoneChange = (newPhone: string) => {
     setPhone(newPhone);
     matchIsValidTel(newPhone);
   };
@@ -79,8 +76,9 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
             if (
               !passwordRef.current?.value ||
               !emailRef.current?.value ||
-              (type === "create account" ? !fullName.current?.value ||
-              !matchIsValidTel(phone): false)
+              (type === "create account"
+                ? !fullName.current?.value || !matchIsValidTel(phone)
+                : false)
             )
               return;
             const cred = {
@@ -156,17 +154,35 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
               <></>
             )}
           </Grid>
-          <FormGroup>
-            <FormControlLabel
-              control={<Checkbox />}
-              label="Remember password"
-            />
-          </FormGroup>
-          <ButtonGroup>
+
+          <ButtonGroup
+            sx={{
+              marginY: 2,
+            }}
+          >
             <Button variant="contained" type="submit">
               {type}
             </Button>
-            <Button startIcon={<Google />}>Google Sign In</Button>
+            <Button
+              startIcon={<Google />}
+              onClick={() => {
+                signInWithGoogle().catch(({ message }: Error) => {
+                  if (
+                    message === "Firebase: Error (auth/popup-closed-by-user)."
+                  ) {
+                    toast.error("Pup up closed unexpectedly", {
+                      hideProgressBar: true,
+                    });
+                  } else {
+                    toast.error(
+                      "An unexpected error ocurred, please check your internet connection"
+                    );
+                  }
+                });
+              }}
+            >
+              Continue With Google
+            </Button>
           </ButtonGroup>
           <Typography my={3}>
             {type === "sign in" ? (
