@@ -7,6 +7,8 @@ import {
   updateProfile,
   User,
   onAuthStateChanged,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -27,9 +29,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const signIn = (email: string, password: string) => {
-  return signInWithEmailAndPassword(auth, email, password);
-};
+const googleAuth = new GoogleAuthProvider();
+
+export const signIn = (email: string, password: string) =>
+  signInWithEmailAndPassword(auth, email, password);
 
 export const createAccount = (
   email: string,
@@ -37,8 +40,8 @@ export const createAccount = (
   fullName: string,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   phone: string
-) => {
-  return new Promise<User>((resolve, reject) => {
+) =>
+  new Promise<User>((resolve, reject) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCred) => {
         const { user } = userCred;
@@ -50,10 +53,11 @@ export const createAccount = (
       })
       .then(reject);
   });
-};
 
 export const db = getFirestore(app);
 
-export const subscribeToUser = (subscriberFunction: (user: User | null) => void) => {
-  onAuthStateChanged(auth, subscriberFunction)
-}
+export const subscribeToUser = (
+  subscriberFunction: (user: User | null) => void
+) => onAuthStateChanged(auth, subscriberFunction);
+
+export const signInWithGoogle = () => signInWithPopup(auth, googleAuth);
