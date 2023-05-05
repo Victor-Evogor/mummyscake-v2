@@ -14,10 +14,29 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const mockCart: {name: string, price: number, quantity: number}[] = [
+  {
+    name: "Vanilla Red Vanilla Cake",
+    price: 45.99,
+    quantity: 2,
+  },
+  {
+    name: "Strawberry Bean Cake",
+    price: 30.99,
+    quantity: 4
+  },
+  {
+    name: "Coconut Milk Cake",
+    price: 20.99,
+    quantity: 6
+  }
+];
+
 export const Provider: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [cart, setCart] = useState(mockCart);
   const { Provider } = GlobalContext;
 
   const monitorUser = (user: User | null) => {
@@ -35,6 +54,8 @@ export const Provider: FunctionComponent<PropsWithChildren> = ({
       value={{
         user,
         setUser,
+        cart,
+        setCart
       }}
     >
       <ApolloProvider client={client}>
