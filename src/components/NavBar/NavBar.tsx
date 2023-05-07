@@ -32,8 +32,9 @@ import {
   Search as SearchIcon,
   ShoppingCart,
   Delete,
+  Favorite
 } from "@mui/icons-material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../hooks/user";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
@@ -44,6 +45,8 @@ import { useCart } from "../../hooks/useCart";
 import { CartItem } from "../../types/Cart";
 import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
+import { removeElementAtIndex } from "../../utils/removeElementAtIndex";
+import format from "format-number"
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -100,7 +103,12 @@ export const NavBar = () => {
   const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isDrawerCartOpen, setIsDrawerCartOpen] = useState(true);
-  const { cart } = useCart();
+  const { cart, setCart } = useCart();
+  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+
+  useEffect(()=>{
+    console.log("Cart changed", cart);
+  }, [cart]);
 
   return (
     <>
@@ -120,12 +128,11 @@ export const NavBar = () => {
             <Typography textAlign={"right"} gutterBottom>
               <Tooltip title={"Proceed to checkout"}>
                 <Button>
-                  $
                   {
-                    (cart as Pick<CartItem, "price" | "quantity">[]).reduce(
+                    format({decimal: ".", round: 2, prefix: "$"})((cart as Pick<CartItem, "price" | "quantity">[]).reduce(
                       (prev, { price, quantity }) => ({price: prev.price + quantity * price, quantity}),
                       { price: 0, quantity: 0 }
-                    ).price
+                    ).price)
                   }
                 </Button>
               </Tooltip>
@@ -168,10 +175,10 @@ export const NavBar = () => {
               </ListItemButton>
               <Collapse in={isDrawerCartOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  {cart.map(({ quantity, price, name }) => {
+                  {cart.map(({ quantity, price, name }, index) => {
                     return (
-                      <>
-                        <ListItemButton sx={{ pl: 4 }}>
+
+                        <ListItemButton sx={{ pl: 4 }}  key={index}>
                           <ListItem
                             secondaryAction={
                               <Tooltip title="remove one">
@@ -179,7 +186,8 @@ export const NavBar = () => {
                                   edge="end"
                                   aria-label="delete"
                                   onClick={() => {
-                                    console.log("Delete");
+                                    console.log("Delete", index);
+                                    setCart(removeElementAtIndex(cart, index))
                                   }}
                                 >
                                   <Delete />
@@ -197,11 +205,20 @@ export const NavBar = () => {
                             />
                           </ListItem>
                         </ListItemButton>
-                      </>
+
                     );
                   })}
                 </List>
               </Collapse>
+              <ListItemButton onClick={()=>{
+                setIsFavoritesOpen(!isFavoritesOpen)
+              }}>
+                <ListItemIcon>
+                  <Favorite/>
+                </ListItemIcon>
+                <ListItemText primary="Favorites"/>
+                {isFavoritesOpen ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
             </List>
             <Button variant="contained" onClick={()=>{
               setIsDrawerOpen(false);
