@@ -6,6 +6,7 @@ import { signIn } from "../firebase";
 import { useNavigate, Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUser } from "../hooks/user";
+import { CartProvider } from "../providers/CartProvider";
 
 export const SignIn = () => {
   const { user } = useUser();
@@ -32,7 +33,9 @@ export const SignIn = () => {
 
   return (
     <>
+    <CartProvider>
       <NavBar />
+      </CartProvider>
       <Box
         sx={{
           backgroundColor: "white.main",
