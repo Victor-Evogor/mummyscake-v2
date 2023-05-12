@@ -32,7 +32,8 @@ import {
   Search as SearchIcon,
   ShoppingCart,
   Delete,
-  Favorite
+  Favorite,
+  Money
 } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../hooks/user";
@@ -105,10 +106,7 @@ export const NavBar = () => {
   const [isDrawerCartOpen, setIsDrawerCartOpen] = useState(true);
   const { cart, setCart } = useCart();
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
-
-  useEffect(()=>{
-    console.log("Cart changed", cart);
-  }, [cart]);
+  const [isOrderOpen, setIsOrderOpen] = useState(false);
 
   return (
     <>
@@ -218,6 +216,15 @@ export const NavBar = () => {
                 </ListItemIcon>
                 <ListItemText primary="Favorites"/>
                 {isFavoritesOpen ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+              <ListItemButton onClick={()=>{
+                setIsOrderOpen(!isOrderOpen);
+              }}>
+                <ListItemIcon>
+                  <Money/>
+                </ListItemIcon>
+                <ListItemText primary="Orders"/>
+                {isOrderOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </List>
             <Button variant="contained" onClick={()=>{
