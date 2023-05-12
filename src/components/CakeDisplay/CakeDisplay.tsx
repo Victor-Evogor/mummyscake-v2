@@ -1,4 +1,4 @@
-import { useState, FunctionComponent } from "react";
+import { useState, FunctionComponent, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Card,
@@ -7,7 +7,6 @@ import {
   CardContent,
   CardActions,
   Collapse,
-  Box,
   Paper,
   Grid,
   Rating,
@@ -21,6 +20,7 @@ import {
   ExpandMore as ExpandMoreIcon,
   Favorite as FavoriteIcon,
   ShoppingCart,
+  FavoriteBorder,
 } from "@mui/icons-material";
 
 import Avatar from "@mui/material/Avatar";
@@ -28,6 +28,13 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import { Cake } from "../../types/Cake";
+import { useUser } from "../../hooks/user";
+import { useFavorite } from "../../hooks/useFavorite";
+import { useNavigate } from "react-router-dom";
+import { removeElementAtIndex } from "../../utils/removeElementAtIndex";
+import { useMutation } from "@apollo/client";
+import { UN_FAVORITE_CAKE } from "../../gql/unFavoriteCake.gql";
+import { FAVORITE_CAKE } from "../../gql/favoriteCake.gql";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -44,7 +51,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export const CakeDisplay: FunctionComponent<Omit<Cake, "id">> = ({
+export const CakeDisplay: FunctionComponent<Cake> = ({
   image,
   description,
   ingredients,
@@ -59,12 +66,22 @@ export const CakeDisplay: FunctionComponent<Omit<Cake, "id">> = ({
   reviews,
   size,
   weight,
+  id,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const { user } = useUser();
+  const { favorites, setFavorites } = useFavorite();
+  const navigate = useNavigate();
+  const [unFavorite] = useMutation(UN_FAVORITE_CAKE);
+  const [favorite] = useMutation(FAVORITE_CAKE);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  useEffect(()=>{
+    console.log(favorites, id);
+  }, [favorites]);
+  
 
   return (
     <Grid py={2} container>
@@ -102,9 +119,48 @@ export const CakeDisplay: FunctionComponent<Omit<Cake, "id">> = ({
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
-            </IconButton>
+          <IconButton
+                onClick={() => {
+                  if (!user) {
+                    navigate("/log-in");
+                    return;
+                  }
+                  if (!favorites.includes(id)) {
+                    setFavorites([...favorites, id]);
+                    favorite({
+                      variables: {
+                        userId: user.uid,
+                        favoriteCakeId: id,
+                      },
+                    }).then((result) => {
+                      setFavorites([...favorites, id]);
+                      console.log(result);
+                    });
+                  } else {
+                    setFavorites(
+                      removeElementAtIndex(favorites, favorites.indexOf(id))
+                    );
+                    unFavorite({
+                      variables: {
+                        userId: user.uid,
+                        favoriteCakeId: id,
+                      },
+                    }).then((result) => {
+                      console.log(result);
+                    });
+                  }
+                }}
+              >
+                {user ? (
+                  favorites.includes(id) ? (
+                    <FavoriteIcon color="error" />
+                  ) : (
+                    <FavoriteBorder color="error" />
+                  )
+                ) : (
+                  <FavoriteBorder />
+                )}
+              </IconButton>
             <IconButton aria-label="ratings">
               <Rating value={rating} max={5} precision={0.1} readOnly />
             </IconButton>
@@ -143,19 +199,31 @@ export const CakeDisplay: FunctionComponent<Omit<Cake, "id">> = ({
               <ul>
                 <li>
                   <Typography component="span">Calories</Typography>:{" "}
-                  {nutritional_info.calories}<Typography component="span" fontWeight={600}>g</Typography>
+                  {nutritional_info.calories}
+                  <Typography component="span" fontWeight={600}>
+                    g
+                  </Typography>
                 </li>
                 <li>
                   <Typography component="span">Fat</Typography>:{" "}
-                  {nutritional_info.fat}<Typography component="span" fontWeight={600}>g</Typography>
+                  {nutritional_info.fat}
+                  <Typography component="span" fontWeight={600}>
+                    g
+                  </Typography>
                 </li>
                 <li>
                   <Typography component="span">Sugar</Typography>:{" "}
-                  {nutritional_info.sugar}<Typography component="span" fontWeight={600}>g</Typography>
+                  {nutritional_info.sugar}
+                  <Typography component="span" fontWeight={600}>
+                    g
+                  </Typography>
                 </li>
                 <li>
                   <Typography component="span">Protein</Typography>:{" "}
-                  {nutritional_info.protein}<Typography component="span" fontWeight={600}>g</Typography>
+                  {nutritional_info.protein}
+                  <Typography component="span" fontWeight={600}>
+                    g
+                  </Typography>
                 </li>
               </ul>
 
@@ -173,11 +241,17 @@ export const CakeDisplay: FunctionComponent<Omit<Cake, "id">> = ({
               <ul>
                 <li>
                   <Typography component="span">Diameter</Typography>:{" "}
-                  {size.diameter}<Typography component="span" fontWeight={600}>in</Typography>
+                  {size.diameter}
+                  <Typography component="span" fontWeight={600}>
+                    in
+                  </Typography>
                 </li>
                 <li>
                   <Typography component="span">Height</Typography>:{" "}
-                  {size.height}<Typography component="span" fontWeight={600}>in</Typography>
+                  {size.height}
+                  <Typography component="span" fontWeight={600}>
+                    in
+                  </Typography>
                 </li>
                 <li>
                   <Typography component="span">Serving size</Typography>:{" "}
@@ -188,7 +262,12 @@ export const CakeDisplay: FunctionComponent<Omit<Cake, "id">> = ({
                 <Typography component="span" fontWeight={600}>
                   Weight:
                 </Typography>{" "}
-                <Typography component="span">{weight}<Typography component="span" fontWeight={600}>lbs</Typography></Typography>
+                <Typography component="span">
+                  {weight}
+                  <Typography component="span" fontWeight={600}>
+                    lbs
+                  </Typography>
+                </Typography>
               </Typography>
             </CardContent>
           </Collapse>

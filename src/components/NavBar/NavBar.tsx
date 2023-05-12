@@ -33,7 +33,7 @@ import {
   ShoppingCart,
   Delete,
   Favorite,
-  Money
+  Money,
 } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../hooks/user";
@@ -47,7 +47,11 @@ import { CartItem } from "../../types/Cart";
 import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
 import { removeElementAtIndex } from "../../utils/removeElementAtIndex";
-import format from "format-number"
+import format from "format-number";
+import { useFavorite } from "../../hooks/useFavorite";
+import { FavoriteItem } from "../FavoritePanel/FavoritePanel";
+import { GET_ALL_CAKES_FAVORITE } from "../../gql/getAllCakesFavorite.gql";
+import { getFavorites } from "../../utils/getFavorites";
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -107,6 +111,28 @@ export const NavBar = () => {
   const { cart, setCart } = useCart();
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
   const [isOrderOpen, setIsOrderOpen] = useState(false);
+  const { favorites } = useFavorite();
+  const favoritesResult = useQuery<{
+    getAllCakes: {
+      id: string;
+      favorites: string[];
+    }[];
+  }>(GET_ALL_CAKES_FAVORITE);
+  const { setFavorites } = useFavorite();
+
+  useEffect(() => {
+    if (!user) return;
+    if (favoritesResult.data) {
+      setFavorites(getFavorites(favoritesResult.data.getAllCakes, user.uid));
+    }
+    if (favoritesResult.error) {
+      console.log(favoritesResult.error);
+    }
+    console.log(favoritesResult.data);
+  }, [user]);
+
+  
+  
 
   return (
     <>
@@ -126,12 +152,15 @@ export const NavBar = () => {
             <Typography textAlign={"right"} gutterBottom>
               <Tooltip title={"Proceed to checkout"}>
                 <Button>
-                  {
-                    format({decimal: ".", round: 2, prefix: "$"})((cart as Pick<CartItem, "price" | "quantity">[]).reduce(
-                      (prev, { price, quantity }) => ({price: prev.price + quantity * price, quantity}),
+                  {format({ decimal: ".", round: 2, prefix: "$" })(
+                    (cart as Pick<CartItem, "price" | "quantity">[]).reduce(
+                      (prev, { price, quantity }) => ({
+                        price: prev.price + quantity * price,
+                        quantity,
+                      }),
                       { price: 0, quantity: 0 }
-                    ).price)
-                  }
+                    ).price
+                  )}
                 </Button>
               </Tooltip>
             </Typography>
@@ -175,62 +204,76 @@ export const NavBar = () => {
                 <List component="div" disablePadding>
                   {cart.map(({ quantity, price, name }, index) => {
                     return (
-
-                        <ListItemButton sx={{ pl: 4 }}  key={index}>
-                          <ListItem
-                            secondaryAction={
-                              <Tooltip title="remove one">
-                                <IconButton
-                                  edge="end"
-                                  aria-label="delete"
-                                  onClick={() => {
-                                    console.log("Delete", index);
-                                    setCart(removeElementAtIndex(cart, index))
-                                  }}
-                                >
-                                  <Delete />
-                                </IconButton>
+                      <ListItemButton sx={{ pl: 4 }} key={index}>
+                        <ListItem
+                          secondaryAction={
+                            <Tooltip title="remove one">
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={() => {
+                                  console.log("Delete", index);
+                                  setCart(removeElementAtIndex(cart, index));
+                                }}
+                              >
+                                <Delete />
+                              </IconButton>
+                            </Tooltip>
+                          }
+                        >
+                          <ListItemText
+                            primary={name}
+                            secondary={
+                              <Tooltip title={`${quantity} x ${price}`}>
+                                <span>${quantity * price}</span>
                               </Tooltip>
                             }
-                          >
-                            <ListItemText
-                              primary={name}
-                              secondary={
-                                <Tooltip title={`${quantity} x ${price}`}>
-                                  <span>${quantity * price}</span>
-                                </Tooltip>
-                              }
-                            />
-                          </ListItem>
-                        </ListItemButton>
-
+                          />
+                        </ListItem>
+                      </ListItemButton>
                     );
                   })}
                 </List>
               </Collapse>
-              <ListItemButton onClick={()=>{
-                setIsFavoritesOpen(!isFavoritesOpen)
-              }}>
+              <ListItemButton
+                onClick={() => {
+                  setIsFavoritesOpen(!isFavoritesOpen);
+                }}
+              >
                 <ListItemIcon>
-                  <Favorite/>
+                  <Favorite />
                 </ListItemIcon>
-                <ListItemText primary="Favorites"/>
+                <ListItemText primary="Favorites" />
                 {isFavoritesOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
-              <ListItemButton onClick={()=>{
-                setIsOrderOpen(!isOrderOpen);
-              }}>
+              <Collapse in={isFavoritesOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {favorites.map((id) => (
+                    <FavoriteItem id={id} key={id} />
+                  ))}
+                </List>
+              </Collapse>
+              <ListItemButton
+                onClick={() => {
+                  setIsOrderOpen(!isOrderOpen);
+                }}
+              >
                 <ListItemIcon>
-                  <Money/>
+                  <Money />
                 </ListItemIcon>
-                <ListItemText primary="Orders"/>
+                <ListItemText primary="Orders" />
                 {isOrderOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
             </List>
-            <Button variant="contained" onClick={()=>{
-              setIsDrawerOpen(false);
-              signOut(auth);
-            }}>Sign Out</Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setIsDrawerOpen(false);
+                signOut(auth);
+              }}
+            >
+              Sign Out
+            </Button>
           </Container>
         </Box>
       </Drawer>
