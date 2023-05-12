@@ -7,6 +7,8 @@ import { NotFound } from "./Pages/NotFound";
 import { SignIn } from "./Pages/SignIn";
 import { CreateAccount } from "./Pages/CreateAccount";
 import { CakePage } from "./Pages/CakePage";
+import { FavoritesProvider } from "./providers/FavoritesProvider";
+import { AdminPage } from "./Pages/AdminPage";
 
 export const App = () => {
   return (
@@ -14,11 +16,19 @@ export const App = () => {
       <ThemeProvider theme={themes}>
         <Provider>
           <Routes>
-            <Route index element={<Home />} />
-            <Route path="/log-in" element={<SignIn/>}/>
-            <Route path="/create-account" element={<CreateAccount/>}/>
-            <Route path="*" element={<NotFound/>}/>
-            <Route path="/cakes/:id" element={<CakePage/>}/>
+            <Route
+              index
+              element={
+                <FavoritesProvider>
+                  <Home />
+                </FavoritesProvider>
+              }
+            />
+            <Route path="/log-in" element={<SignIn />} />
+            <Route path="/create-account" element={<CreateAccount />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/cakes/:id" element={<CakePage />} />
+            <Route path="/admin" element={<AdminPage/>}/>
           </Routes>
         </Provider>
       </ThemeProvider>

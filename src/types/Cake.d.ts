@@ -30,5 +30,6 @@ export interface Cake {
         fat: number,
         sugar: number,
         protein: number
-    }
+    },
+    favorites: string[]
 }
