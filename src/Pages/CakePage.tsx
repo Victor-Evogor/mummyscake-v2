@@ -7,7 +7,6 @@ import { Cake } from "../types/Cake";
 import { CakeDisplay } from "../components/CakeDisplay/CakeDisplay";
 import { Container } from "@mui/material";
 import { CartProvider } from "../providers/CartProvider";
-import { FavoritesProvider } from "../providers/FavoritesProvider";
 
 export const CakePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,24 +18,23 @@ export const CakePage = () => {
   });
   return (
     <>
-      <FavoritesProvider>
-        <CartProvider>
-          <NavBar />
-        </CartProvider>
-        <Container>
-          {loading ? (
-            <span>Loading Screen</span>
-          ) : error ? (
-            <Navigate to="Not found" />
-          ) : !data ? (
-            <span>error</span>
-          ) : (
-            <CartProvider>
-              <CakeDisplay {...data.getCake} id={id} />
-            </CartProvider>
-          )}
-        </Container>
-      </FavoritesProvider>
+      <CartProvider>
+        <NavBar />
+      </CartProvider>
+      <Container>
+        {loading ? (
+          <span>Loading Screen</span>
+        ) : error ? (
+          <Navigate to="Not found" />
+        ) : !data ? (
+          <span>error</span>
+        ) : (
+          <CartProvider>
+            <CakeDisplay {...data.getCake} id={id} />
+          </CartProvider>
+        )}
+      </Container>
+
       <Footer />
     </>
   );
