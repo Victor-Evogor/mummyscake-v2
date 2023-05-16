@@ -20,7 +20,6 @@
     "firebase": "^9.19.1",
     "format-number": "^3.0.0",
     "graphql": "^16.6.0",
-    "husky": "^8.0.3",
     "mui-tel-input": "^3.1.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -37,13 +36,14 @@
     "cypress": "^12.9.0",
     "eslint": "^8.36.0",
     "eslint-plugin-react": "^7.32.2",
+    "husky": "^8.0.3",
     "react-testing-library": "^8.0.1",
     "typescript": "^4.9.3",
     "vite": "^4.0.0"
   },
   "husky": {
     "hooks": {
-      "pre-commit":"echo Husky"
+      "pre-commit": "echo Husky"
     }
   }
 }
