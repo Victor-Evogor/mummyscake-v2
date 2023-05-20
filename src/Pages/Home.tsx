@@ -4,7 +4,6 @@ import { Hero } from "../components/HeroSection/HeroSection";
 import { Footer } from "../components/Footer/Footer";
 import { Testimonials } from "../components/Testimonials/Testimonials";
 import { Featured } from "../components/Featured/Featured";
-import { CartProvider } from "../providers/CartProvider";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CAKES_FAVORITE } from "../gql/getAllCakesFavorite.gql";
 import { useFavorite } from "../hooks/useFavorite";
@@ -35,9 +34,7 @@ export const Home = () => {
   }, [user]);
   return (
     <Box sx={{ flexGrow: 1 }} bgcolor="white.main">
-      <CartProvider>
-        <NavBar />
-      </CartProvider>
+      <NavBar />
       <Hero />
       <Testimonials />
       <Featured />

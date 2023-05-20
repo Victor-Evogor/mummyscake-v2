@@ -6,7 +6,6 @@ import { GET_CAKE } from "../gql/getCake.gql";
 import { Cake } from "../types/Cake";
 import { CakeDisplay } from "../components/CakeDisplay/CakeDisplay";
 import { Container } from "@mui/material";
-import { CartProvider } from "../providers/CartProvider";
 
 export const CakePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,9 +17,7 @@ export const CakePage = () => {
   });
   return (
     <>
-      <CartProvider>
-        <NavBar />
-      </CartProvider>
+      <NavBar />
       <Container>
         {loading ? (
           <span>Loading Screen</span>
@@ -29,12 +26,9 @@ export const CakePage = () => {
         ) : !data ? (
           <span>error</span>
         ) : (
-          <CartProvider>
-            <CakeDisplay {...data.getCake} id={id} />
-          </CartProvider>
+          <CakeDisplay {...data.getCake} id={id} />
         )}
       </Container>
-
       <Footer />
     </>
   );

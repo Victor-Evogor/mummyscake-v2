@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "jest",
-    "dev:firebase": "firebase emulators:start"
+    "dev:firebase": "firebase emulators:start",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/client": "^3.7.12",

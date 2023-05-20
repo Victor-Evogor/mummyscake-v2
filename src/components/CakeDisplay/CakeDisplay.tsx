@@ -35,6 +35,9 @@ import { removeElementAtIndex } from "../../utils/removeElementAtIndex";
 import { useMutation } from "@apollo/client";
 import { UN_FAVORITE_CAKE } from "../../gql/unFavoriteCake.gql";
 import { FAVORITE_CAKE } from "../../gql/favoriteCake.gql";
+import { ADD_TO_CART } from "../../gql/addToCart.gql";
+import { quantifyCakes } from "../../utils/quantifyCake";
+import { useCart } from "../../hooks/useCart";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -74,14 +77,16 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
   const navigate = useNavigate();
   const [unFavorite] = useMutation(UN_FAVORITE_CAKE);
   const [favorite] = useMutation(FAVORITE_CAKE);
+  const [addToCart] = useMutation(ADD_TO_CART);
+  const { setCart, cart } = useCart();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
   useEffect(()=>{
-    console.log(favorites, id);
-  }, [favorites]);
-  
+    console.log(cart);
+  }, [cart])
 
   return (
     <Grid py={2} container>
@@ -119,48 +124,47 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-          <IconButton
-                onClick={() => {
-                  if (!user) {
-                    navigate("/log-in");
-                    return;
-                  }
-                  if (!favorites.includes(id)) {
+            <IconButton
+              onClick={() => {
+                if (!user) {
+                  navigate("/log-in");
+                  return;
+                }
+                if (!favorites.includes(id)) {
+                  setFavorites([...favorites, id]);
+                  favorite({
+                    variables: {
+                      userId: user.uid,
+                      favoriteCakeId: id,
+                    },
+                  }).then(() => {
                     setFavorites([...favorites, id]);
-                    favorite({
-                      variables: {
-                        userId: user.uid,
-                        favoriteCakeId: id,
-                      },
-                    }).then((result) => {
-                      setFavorites([...favorites, id]);
-                      console.log(result);
-                    });
-                  } else {
-                    setFavorites(
-                      removeElementAtIndex(favorites, favorites.indexOf(id))
-                    );
-                    unFavorite({
-                      variables: {
-                        userId: user.uid,
-                        favoriteCakeId: id,
-                      },
-                    }).then((result) => {
-                      console.log(result);
-                    });
-                  }
-                }}
-              >
-                {user ? (
-                  favorites.includes(id) ? (
-                    <FavoriteIcon color="error" />
-                  ) : (
-                    <FavoriteBorder color="error" />
-                  )
+                  });
+                } else {
+                  setFavorites(
+                    removeElementAtIndex(favorites, favorites.indexOf(id))
+                  );
+                  unFavorite({
+                    variables: {
+                      userId: user.uid,
+                      favoriteCakeId: id,
+                    },
+                  }).then((result) => {
+                    console.log(result);
+                  });
+                }
+              }}
+            >
+              {user ? (
+                favorites.includes(id) ? (
+                  <FavoriteIcon color="error" />
                 ) : (
-                  <FavoriteBorder />
-                )}
-              </IconButton>
+                  <FavoriteBorder color="error" />
+                )
+              ) : (
+                <FavoriteBorder />
+              )}
+            </IconButton>
             <IconButton aria-label="ratings">
               <Rating value={rating} max={5} precision={0.1} readOnly />
             </IconButton>
@@ -292,6 +296,30 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
                 endIcon={<ShoppingCart />}
                 variant="contained"
                 color="secondary"
+                onClick={() => {
+                  if (!user) return navigate("/log-in");
+
+                  addToCart({
+                    variables: {
+                      userId: user.uid,
+                      cakeId: id,
+                    },
+                  }).then(({ data }) => {
+                    if (!data) return;
+                    const quantifiedCakes = quantifyCakes(
+                      data.addToCart.cart.items
+                    );
+                    setCart(
+                      quantifiedCakes.map(({ name, price, quantity }) => ({
+                        name,
+                        price,
+                        quantity,
+                      }))
+                    );
+
+                  });
+
+                }}
               >
                 Add to Cart
               </Button>

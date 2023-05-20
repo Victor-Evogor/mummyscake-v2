@@ -20,6 +20,10 @@ import { Link } from "react-router-dom";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 import { signInWithGoogle } from "../../firebase";
 import { toast } from "react-toastify";
+import { useMutation } from "@apollo/client";
+import { CREATE_NEW_USER, CreateNewUserType } from "../../gql/createNewUser.gql";
+import { useCart } from "../../hooks/useCart"
+import { quantifyCakes } from "../../utils/quantifyCake";
 
 interface Props {
   type: "sign in" | "create account";
@@ -35,6 +39,8 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const fullName = useRef<HTMLInputElement>(null);
+  const [createNewUser] = useMutation<CreateNewUserType>(CREATE_NEW_USER);
+  const { setCart } = useCart();
 
   const [showPassword, setShowPassword] = useState(false);
   const [phone, setPhone] = useState("+234");
@@ -166,7 +172,17 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
             <Button
               startIcon={<Google />}
               onClick={() => {
-                signInWithGoogle().catch(({ message }: Error) => {
+                signInWithGoogle().then(({user: {uid}})=>{
+                  createNewUser({
+                    variables: {
+                      userId: uid
+                    }
+                  }).then(({data})=>{
+                    if(!data) return
+                    const quantifiedCakes = quantifyCakes(data.createUser.cart.items)
+                    setCart(quantifiedCakes.map(({name, price, quantity, id}) => ({name, price, quantity, id})))
+                  })
+                }).catch(({ message }: Error) => {
                   if (
                     message === "Firebase: Error (auth/popup-closed-by-user)."
                   ) {
