@@ -1,10 +1,19 @@
 import { useContext } from "react";
-import {FavoriteContext, FavoritesContextType} from "../providers/FavoritesProvider"
+import {
+  FavoriteContext,
+} from "../providers/FavoritesProvider";
 
 export const useFavorite = () => {
-    const {favorites, setFavorites} = useContext(FavoriteContext) as FavoritesContextType
+    const states =  useContext(FavoriteContext);
+  if (!states) {
     return {
-        favorites,
-        setFavorites
-    }
-}
+      favorites: [],
+      setFavorites: () => [],
+    };
+  }
+  const { favorites, setFavorites } =states
+  return {
+    favorites,
+    setFavorites,
+  };
+};

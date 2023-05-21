@@ -7,7 +7,6 @@ import { NotFound } from "./Pages/NotFound";
 import { SignIn } from "./Pages/SignIn";
 import { CreateAccount } from "./Pages/CreateAccount";
 import { CakePage } from "./Pages/CakePage";
-import { FavoritesProvider } from "./providers/FavoritesProvider";
 import { AdminPage } from "./Pages/AdminPage";
 
 export const App = () => {
@@ -19,9 +18,7 @@ export const App = () => {
             <Route
               index
               element={
-                <FavoritesProvider>
                   <Home />
-                </FavoritesProvider>
               }
             />
             <Route path="/log-in" element={<SignIn />} />

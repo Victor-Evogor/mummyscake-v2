@@ -81,12 +81,10 @@ const FeaturedItem: FunctionComponent<Cake> = ({
                         userId: user.uid,
                         favoriteCakeId: id,
                       },
-                    }).then((result) => {
+                    }).then(() => {
                       setFavorites([...favorites, id]);
-                      console.log(result);
                     });
                   } else {
-                    console.log("Un favorite here");
                     setFavorites(
                       removeElementAtIndex(favorites, favorites.indexOf(id))
                     );
