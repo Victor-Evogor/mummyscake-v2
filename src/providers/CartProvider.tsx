@@ -1,4 +1,9 @@
-import { createContext, useState, FunctionComponent, PropsWithChildren } from "react";
+import {
+  createContext,
+  useState,
+  FunctionComponent,
+  PropsWithChildren,
+} from "react";
 import { SetState } from "../types/setState";
 import { CartItem } from "../types/Cart";
 
@@ -9,27 +14,12 @@ export interface CartContextType {
 
 export const CartStore = createContext<CartContextType | null>(null);
 
-const mockCart: { name: string; price: number; quantity: number }[] = [
-  {
-    name: "Vanilla Red Vanilla Cake",
-    price: 45.99,
-    quantity: 2,
-  },
-  {
-    name: "Strawberry Bean Cake",
-    price: 30.99,
-    quantity: 4,
-  },
-  {
-    name: "Coconut Milk Cake",
-    price: 20.99,
-    quantity: 6,
-  },
-];
 
-export const CartProvider: FunctionComponent<PropsWithChildren> = ({children}) => {
+export const CartProvider: FunctionComponent<PropsWithChildren> = ({
+  children,
+}) => {
   const { Provider } = CartStore;
-  const [cart, setCart] = useState(mockCart);
+  const [cart, setCart] = useState<CartItem[]>([]);
   return (
     <Provider
       value={{
@@ -37,7 +27,7 @@ export const CartProvider: FunctionComponent<PropsWithChildren> = ({children}) =
         setCart,
       }}
     >
-        {children}
+      {children}
     </Provider>
   );
 };

@@ -38,7 +38,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../hooks/user";
 import { Link } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Cake } from "../../types/Cake";
 import { GET_ALL_CAKES_NAME } from "../../gql/getAllCakesName.gql";
 import { useNavigate } from "react-router-dom";
@@ -46,12 +46,14 @@ import { useCart } from "../../hooks/useCart";
 import { CartItem } from "../../types/Cart";
 import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
-import { removeElementAtIndex } from "../../utils/removeElementAtIndex";
 import format from "format-number";
 import { useFavorite } from "../../hooks/useFavorite";
 import { FavoriteItem } from "../FavoritePanel/FavoritePanel";
 import { GET_ALL_CAKES_FAVORITE } from "../../gql/getAllCakesFavorite.gql";
 import { getFavorites } from "../../utils/getFavorites";
+import { CREATE_NEW_USER } from "../../gql/createNewUser.gql";
+import { quantifyCakes } from "../../utils/quantifyCake";
+import { REMOVE_FROM_CART } from "../../gql/removeFromCart.gql";
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -119,6 +121,8 @@ export const NavBar = () => {
     }[];
   }>(GET_ALL_CAKES_FAVORITE);
   const { setFavorites } = useFavorite();
+  const [createNewUser] = useMutation(CREATE_NEW_USER);
+  const [removeFromCart] = useMutation(REMOVE_FROM_CART);
 
   useEffect(() => {
     if (!user) return;
@@ -128,11 +132,23 @@ export const NavBar = () => {
     if (favoritesResult.error) {
       console.log(favoritesResult.error);
     }
-    console.log(favoritesResult.data);
+    createNewUser({
+      variables: {
+        userId: user.uid,
+      },
+    }).then(({ data }) => {
+      if (!data) return;
+      const quantifiedCakes = quantifyCakes(data.createUser.cart.items);
+      setCart(
+        quantifiedCakes.map(({ name, price, quantity, id }) => ({
+          name,
+          price,
+          quantity,
+          id,
+        }))
+      );
+    });
   }, [user]);
-
-  
-  
 
   return (
     <>
@@ -152,7 +168,7 @@ export const NavBar = () => {
             <Typography textAlign={"right"} gutterBottom>
               <Tooltip title={"Proceed to checkout"}>
                 <Button>
-                  {format({ decimal: ".", round: 2, prefix: "$" })(
+                  cart value: {format({ decimal: ".", round: 2, prefix: "$" })(
                     (cart as Pick<CartItem, "price" | "quantity">[]).reduce(
                       (prev, { price, quantity }) => ({
                         price: prev.price + quantity * price,
@@ -202,35 +218,71 @@ export const NavBar = () => {
               </ListItemButton>
               <Collapse in={isDrawerCartOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  {cart.map(({ quantity, price, name }, index) => {
+                  {cart.map(({ quantity, price, name, id }, index) => {
                     return (
-                      <ListItemButton sx={{ pl: 4 }} key={index}>
-                        <ListItem
-                          secondaryAction={
-                            <Tooltip title="remove one">
-                              <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                onClick={() => {
-                                  console.log("Delete", index);
-                                  setCart(removeElementAtIndex(cart, index));
-                                }}
-                              >
-                                <Delete />
-                              </IconButton>
-                            </Tooltip>
-                          }
-                        >
-                          <ListItemText
-                            primary={name}
-                            secondary={
-                              <Tooltip title={`${quantity} x ${price}`}>
-                                <span>${quantity * price}</span>
+                      <Link
+                        key={index}
+                        to={`/cakes/${id}`}
+                        style={{
+                          textDecoration: "none",
+                          color: "initial",
+                        }}
+                      >
+                        <ListItemButton sx={{ pl: 4 }}>
+                          <ListItem
+                            secondaryAction={
+                              <Tooltip title="remove one">
+                                <IconButton
+                                  edge="end"
+                                  aria-label="delete"
+                                  onClick={() => {
+                                    if (!user) return navigate("/log-in");
+                                    removeFromCart({
+                                      variables: {
+                                        userId: user.uid,
+                                        cakeId: id,
+                                      },
+                                    }).then(({ data }) => {
+                                      if (!data) return;
+                                      const quantifiedCakes = quantifyCakes(
+                                        data.removeFromCart.cart.items
+                                      );
+                                      setCart(
+                                        quantifiedCakes.map(
+                                          ({ name, price, quantity, id }) => ({
+                                            name,
+                                            price,
+                                            quantity,
+                                            id,
+                                          })
+                                        )
+                                      );
+                                    });
+                                  }}
+                                  onClickCapture={(e) => e.preventDefault()}
+                                >
+                                  <Delete />
+                                </IconButton>
                               </Tooltip>
                             }
-                          />
-                        </ListItem>
-                      </ListItemButton>
+                          >
+                            <ListItemText
+                              primary={name}
+                              secondary={
+                                <Tooltip title={`${quantity} x ${price}`}>
+                                  <span>
+                                    {format({
+                                      decimal: ".",
+                                      round: 2,
+                                      prefix: "$",
+                                    })(quantity * price)}
+                                  </span>
+                                </Tooltip>
+                              }
+                            />
+                          </ListItem>
+                        </ListItemButton>
+                      </Link>
                     );
                   })}
                 </List>
