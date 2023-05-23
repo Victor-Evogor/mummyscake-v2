@@ -6,6 +6,7 @@ import { AuthForm } from "../components/AuthForm/AuthForm";
 import { createAccount } from "../firebase";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useUser } from "../hooks/user";
+import { toast } from "react-toastify";
 
 export const CreateAccount = () => {
   const { user } = useUser();
@@ -28,7 +29,11 @@ export const CreateAccount = () => {
         console.log(user);
         navigate("/log-in");
       }
-    );
+    ).catch(err => {
+      if(err.message === "Firebase: Error (auth/email-already-in-use)."){
+        toast.error("A user already exist with this email", { hideProgressBar: true });
+      }
+    });
   };
 
 

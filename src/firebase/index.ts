@@ -51,7 +51,7 @@ export const createAccount = (
         // TODO:add phone number to db, or authenticate phone number with otp. Just find something to do with this
         resolve(user);
       })
-      .then(reject);
+      .catch(reject);
   });
 
 export const db = getFirestore(app);
