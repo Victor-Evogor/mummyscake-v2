@@ -79,7 +79,7 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
           my={3}
           onSubmit={(e) => {
             e.preventDefault();
-            if(!matchIsValidTel(phone)){
+            if(!matchIsValidTel(phone) && (type === "create account")){
               toast.error("Invalid Phone number", { hideProgressBar: true });
             }
             if (

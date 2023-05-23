@@ -38,6 +38,7 @@ import { FAVORITE_CAKE } from "../../gql/favoriteCake.gql";
 import { ADD_TO_CART } from "../../gql/addToCart.gql";
 import { quantifyCakes } from "../../utils/quantifyCake";
 import { useCart } from "../../hooks/useCart";
+import { toast } from "react-toastify";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -83,10 +84,6 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  useEffect(()=>{
-    console.log(cart);
-  }, [cart])
 
   return (
     <Grid py={2} container>
@@ -316,9 +313,10 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
                         quantity,
                       }))
                     );
-
+                    toast.info(`${name} has been added to your cart`, {
+                      hideProgressBar: true,
+                    });
                   });
-
                 }}
               >
                 Add to Cart

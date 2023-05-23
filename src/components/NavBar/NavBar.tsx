@@ -167,7 +167,7 @@ export const NavBar = () => {
           <Container>
             <Typography textAlign={"right"} gutterBottom>
               <Tooltip title={"Proceed to checkout"}>
-                <Button>
+                <Button onClick={()=> navigate("/order")}>
                   cart value: {format({ decimal: ".", round: 2, prefix: "$" })(
                     (cart as Pick<CartItem, "price" | "quantity">[]).reduce(
                       (prev, { price, quantity }) => ({
