@@ -9,6 +9,7 @@ import { CreateAccount } from "./Pages/CreateAccount";
 import { CakePage } from "./Pages/CakePage";
 import { AdminPage } from "./Pages/AdminPage";
 import { OrderPage } from "./Pages/OrderPage";
+import { OrderSuccess } from "./Pages/OrderSuccess";
 
 export const App = () => {
   return (
@@ -27,6 +28,7 @@ export const App = () => {
             <Route path="/cakes/:id" element={<CakePage />} />
             <Route path="/admin" element={<AdminPage/>}/>
             <Route path="/order" element={<OrderPage/>}/>
+            <Route path="/order-success" element={<OrderSuccess/>}/>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Provider>

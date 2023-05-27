@@ -5,7 +5,7 @@ import { Footer } from "../components/Footer/Footer";
 import { AuthForm } from "../components/AuthForm/AuthForm";
 import { createAccount } from "../firebase";
 import { useNavigate, Navigate } from "react-router-dom";
-import { useUser } from "../hooks/user";
+import { useUser } from "../hooks/useUser";
 import { toast } from "react-toastify";
 
 export const CreateAccount = () => {
@@ -25,8 +25,7 @@ export const CreateAccount = () => {
     phone?: string;
   }) => {
     createAccount(email, password, fullName as string, phone as string).then(
-      (user) => {
-        console.log(user);
+      () => {
         navigate("/log-in");
       }
     ).catch(err => {

@@ -19,7 +19,7 @@ import { GET_ALL_CAKES } from "../../gql/getAllCakesFull.gql";
 import { Cake } from "../../types/Cake";
 import { Skeleton } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useUser } from "../../hooks/user";
+import { useUser } from "../../hooks/useUser";
 import { useFavorite } from "../../hooks/useFavorite";
 import { FAVORITE_CAKE } from "../../gql/favoriteCake.gql";
 import { removeElementAtIndex } from "../../utils/removeElementAtIndex";
@@ -93,9 +93,7 @@ const FeaturedItem: FunctionComponent<Cake> = ({
                         userId: user.uid,
                         favoriteCakeId: id,
                       },
-                    }).then((result) => {
-                      console.log(result);
-                    });
+                    })
                   }
                 }}
               >

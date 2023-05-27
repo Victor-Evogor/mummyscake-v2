@@ -32,3 +32,6 @@ yarn.lock
 package-lock.json
 
 src/environment.json
+/test-results/
+/playwright-report/
+/playwright/.cache/

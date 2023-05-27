@@ -5,9 +5,19 @@ export const CREATE_NEW_USER = gql`
 mutation CreateUser($userId: ID) {
   createUser(userId: $userId) {
     uid
-    cart {
+    cart{
       value
-      items{
+      items {
+        id
+        name
+        price
+      }
+    }
+    orders {
+      id
+      status
+      value
+      items {
         id
         name
         price

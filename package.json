@@ -9,8 +9,7 @@
     "preview": "vite preview",
     "test": "jest",
     "dev:firebase": "firebase emulators:start",
-    "prepare": "husky install",
-    "start": "node WWW.cjs"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/client": "^3.7.12",
@@ -35,7 +34,6 @@
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "@vitejs/plugin-react-swc": "^3.0.0",
-    "cypress": "^12.9.0",
     "eslint": "^8.36.0",
     "eslint-plugin-react": "^7.32.2",
     "husky": "^8.0.3",

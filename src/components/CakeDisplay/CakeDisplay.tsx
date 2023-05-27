@@ -1,4 +1,4 @@
-import { useState, FunctionComponent, useEffect } from "react";
+import { useState, FunctionComponent } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Card,
@@ -28,7 +28,7 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import { Cake } from "../../types/Cake";
-import { useUser } from "../../hooks/user";
+import { useUser } from "../../hooks/useUser";
 import { useFavorite } from "../../hooks/useFavorite";
 import { useNavigate } from "react-router-dom";
 import { removeElementAtIndex } from "../../utils/removeElementAtIndex";
@@ -79,7 +79,7 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
   const [unFavorite] = useMutation(UN_FAVORITE_CAKE);
   const [favorite] = useMutation(FAVORITE_CAKE);
   const [addToCart] = useMutation(ADD_TO_CART);
-  const { setCart, cart } = useCart();
+  const { setCart } = useCart();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -146,9 +146,7 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
                       userId: user.uid,
                       favoriteCakeId: id,
                     },
-                  }).then((result) => {
-                    console.log(result);
-                  });
+                  })
                 }
               }}
             >
@@ -307,10 +305,11 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
                       data.addToCart.cart.items
                     );
                     setCart(
-                      quantifiedCakes.map(({ name, price, quantity }) => ({
+                      quantifiedCakes.map(({ name, price, quantity, id}) => ({
                         name,
                         price,
                         quantity,
+                        id
                       }))
                     );
                     toast.info(`${name} has been added to your cart`, {

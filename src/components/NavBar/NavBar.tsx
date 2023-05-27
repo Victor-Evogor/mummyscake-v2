@@ -28,7 +28,6 @@ import {
   Mail,
   Menu,
   More,
-  Notifications,
   Search as SearchIcon,
   ShoppingCart,
   Delete,
@@ -36,7 +35,7 @@ import {
   Money,
 } from "@mui/icons-material";
 import { useEffect, useRef, useState } from "react";
-import { useUser } from "../../hooks/user";
+import { useUser } from "../../hooks/useUser";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import { Cake } from "../../types/Cake";
@@ -54,6 +53,8 @@ import { getFavorites } from "../../utils/getFavorites";
 import { CREATE_NEW_USER } from "../../gql/createNewUser.gql";
 import { quantifyCakes } from "../../utils/quantifyCake";
 import { REMOVE_FROM_CART } from "../../gql/removeFromCart.gql";
+import { toast } from "react-toastify";
+import { useOrder } from "../../hooks/useOrder";
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -123,6 +124,8 @@ export const NavBar = () => {
   const { setFavorites } = useFavorite();
   const [createNewUser] = useMutation(CREATE_NEW_USER);
   const [removeFromCart] = useMutation(REMOVE_FROM_CART);
+  const { orders } = useOrder();
+  const { setOrders } = useOrder();
 
   useEffect(() => {
     if (!user) return;
@@ -130,24 +133,43 @@ export const NavBar = () => {
       setFavorites(getFavorites(favoritesResult.data.getAllCakes, user.uid));
     }
     if (favoritesResult.error) {
-      console.log(favoritesResult.error);
+      toast.error(
+        <span>
+          A server error has ocurred, please take a screenshot of the error in
+          the console in the developer tools(CTRL+SHIFT+I to bring it up) and
+          contact{" "}
+          <a href="mailto:victorevogor0001@gmail.com">
+            victorevogor0001@gmail.com
+          </a>
+          Thanks
+        </span>,
+        { hideProgressBar: true }
+      );
+      console.error(favoritesResult.error);
     }
     createNewUser({
       variables: {
         userId: user.uid,
       },
-    }).then(({ data }) => {
-      if (!data) return;
-      const quantifiedCakes = quantifyCakes(data.createUser.cart.items);
-      setCart(
-        quantifiedCakes.map(({ name, price, quantity, id }) => ({
-          name,
-          price,
-          quantity,
-          id,
-        }))
-      );
-    });
+    })
+      .then(({ data }) => {
+        if (!data) return;
+        const quantifiedCakes = quantifyCakes(data.createUser.cart.items);
+
+        setCart(
+          quantifiedCakes.map(({ name, price, quantity, id }) => ({
+            name,
+            price,
+            quantity,
+            id,
+          }))
+        );
+        console.log(data.createUser.orders)
+        setOrders(data.createUser.orders);
+      })
+      .catch((error) => {
+        console.log("Error ===>", error);
+      });
   }, [user]);
 
   return (
@@ -167,8 +189,9 @@ export const NavBar = () => {
           <Container>
             <Typography textAlign={"right"} gutterBottom>
               <Tooltip title={"Proceed to checkout"}>
-                <Button onClick={()=> navigate("/order")}>
-                  cart value: {format({ decimal: ".", round: 2, prefix: "$" })(
+                <Button onClick={() => navigate("/order")}>
+                  cart value:{" "}
+                  {format({ decimal: ".", round: 2, prefix: "$" })(
                     (cart as Pick<CartItem, "price" | "quantity">[]).reduce(
                       (prev, { price, quantity }) => ({
                         price: prev.price + quantity * price,
@@ -316,6 +339,19 @@ export const NavBar = () => {
                 <ListItemText primary="Orders" />
                 {isOrderOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
+              <Collapse in={isOrderOpen} timeout="auto" unmountOnExit>
+                <List component="ul" disablePadding>
+                  {orders ? (
+                    orders.map((order, index) => {
+                      return <ListItem key={index}>
+                        <ListItemText primary={format({ decimal: ".", round: 2, prefix: "$" })(order.value)} secondary={order.status}/>
+                      </ListItem>;
+                    })
+                  ) : (
+                    <></>
+                  )}
+                </List>
+              </Collapse>
             </List>
             <Button
               variant="contained"
@@ -380,7 +416,6 @@ export const NavBar = () => {
                   placeholder="Search a cake"
                   inputRef={searchInput}
                   key={params.id}
-                  onClick={() => console.log(params.id)}
                 />
               )}
               onChange={(_, value) => {
@@ -400,15 +435,6 @@ export const NavBar = () => {
                 >
                   <Badge badgeContent={user ? 4 : undefined} color="error">
                     <Mail />
-                  </Badge>
-                </IconButton>
-                <IconButton
-                  size="large"
-                  aria-label="show 17 new notifications"
-                  color="inherit"
-                >
-                  <Badge badgeContent={user ? 17 : undefined} color="error">
-                    <Notifications />
                   </Badge>
                 </IconButton>
               </>
@@ -440,7 +466,6 @@ export const NavBar = () => {
             <IconButton
               size="large"
               aria-label="show more"
-              aria-controls={""}
               aria-haspopup="true"
               onClick={() => undefined}
               color="inherit"

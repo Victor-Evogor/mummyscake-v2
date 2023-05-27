@@ -9,7 +9,7 @@ import { GET_ALL_CAKES_FAVORITE } from "../gql/getAllCakesFavorite.gql";
 import { useFavorite } from "../hooks/useFavorite";
 import { useEffect } from "react";
 import { getFavorites } from "../utils/getFavorites";
-import { useUser } from "../hooks/user";
+import { useUser } from "../hooks/useUser";
 
 export const Home = () => {
   const { data, error } = useQuery<{
@@ -24,13 +24,11 @@ export const Home = () => {
   useEffect(() => {
     if (!user) return;
     if (data) {
-      console.log(data);
       setFavorites(getFavorites(data.getAllCakes, user.uid));
     }
     if (error) {
-      console.log(error);
+      // 
     }
-    console.log(data);
   }, [user]);
   return (
     <Box sx={{ flexGrow: 1 }} bgcolor="white.main">

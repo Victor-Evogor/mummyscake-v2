@@ -5,7 +5,7 @@ import { Footer } from "../components/Footer/Footer";
 import { signIn } from "../firebase";
 import { useNavigate, Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useUser } from "../hooks/user";
+import { useUser } from "../hooks/useUser";
 import { CartProvider } from "../providers/CartProvider";
 
 export const SignIn = () => {
