@@ -164,7 +164,6 @@ export const NavBar = () => {
             id,
           }))
         );
-        console.log(data.createUser.orders)
         setOrders(data.createUser.orders);
       })
       .catch((error) => {
@@ -433,7 +432,7 @@ export const NavBar = () => {
                   aria-label="show 4 new mails"
                   color="inherit"
                 >
-                  <Badge badgeContent={user ? 4 : undefined} color="error">
+                  <Badge badgeContent={/* TODO: Implement this */0} color="error">
                     <Mail />
                   </Badge>
                 </IconButton>
