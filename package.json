@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "jest",
     "dev:firebase": "firebase emulators:start",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pre-commit": "bash pre-commit"
   },
   "dependencies": {
     "@apollo/client": "^3.7.12",
@@ -45,7 +46,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo \"Husky\""
+      "pre-commit": "npm run pre-commit"
     }
   }
 }
