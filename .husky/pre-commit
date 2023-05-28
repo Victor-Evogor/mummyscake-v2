@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+
+git restore --staged src/environment.json;
+
+git restore src/environment.json;
+
+npx lint-staged
+

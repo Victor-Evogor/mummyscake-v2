@@ -1,2 +1,0 @@
-git restore --staged src/environment.json;
-git restore src/environment.json;
