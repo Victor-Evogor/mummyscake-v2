@@ -240,73 +240,84 @@ export const NavBar = () => {
               </ListItemButton>
               <Collapse in={isDrawerCartOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  {cart.map(({ quantity, price, name, id }, index) => {
-                    return (
-                      <Link
-                        key={index}
-                        to={`/cakes/${id}`}
-                        style={{
-                          textDecoration: "none",
-                          color: "initial",
-                        }}
-                      >
-                        <ListItemButton sx={{ pl: 4 }}>
-                          <ListItem
-                            secondaryAction={
-                              <Tooltip title="remove one">
-                                <IconButton
-                                  edge="end"
-                                  aria-label="delete"
-                                  onClick={() => {
-                                    if (!user) return navigate("/log-in");
-                                    removeFromCart({
-                                      variables: {
-                                        userId: user.uid,
-                                        cakeId: id,
-                                      },
-                                    }).then(({ data }) => {
-                                      if (!data) return;
-                                      const quantifiedCakes = quantifyCakes(
-                                        data.removeFromCart.cart.items
-                                      );
-                                      setCart(
-                                        quantifiedCakes.map(
-                                          ({ name, price, quantity, id }) => ({
-                                            name,
-                                            price,
-                                            quantity,
-                                            id,
-                                          })
-                                        )
-                                      );
-                                    });
-                                  }}
-                                  onClickCapture={(e) => e.preventDefault()}
-                                >
-                                  <Delete />
-                                </IconButton>
-                              </Tooltip>
-                            }
-                          >
-                            <ListItemText
-                              primary={name}
-                              secondary={
-                                <Tooltip title={`${quantity} x ${price}`}>
-                                  <span>
-                                    {format({
-                                      decimal: ".",
-                                      round: 2,
-                                      prefix: "$",
-                                    })(quantity * price)}
-                                  </span>
+                  {cart.length ? (
+                    cart.map(({ quantity, price, name, id }, index) => {
+                      return (
+                        <Link
+                          key={index}
+                          to={`/cakes/${id}`}
+                          style={{
+                            textDecoration: "none",
+                            color: "initial",
+                          }}
+                        >
+                          <ListItemButton sx={{ pl: 4 }}>
+                            <ListItem
+                              secondaryAction={
+                                <Tooltip title="remove one">
+                                  <IconButton
+                                    edge="end"
+                                    aria-label="delete"
+                                    onClick={() => {
+                                      if (!user) return navigate("/log-in");
+                                      removeFromCart({
+                                        variables: {
+                                          userId: user.uid,
+                                          cakeId: id,
+                                        },
+                                      }).then(({ data }) => {
+                                        if (!data) return;
+                                        const quantifiedCakes = quantifyCakes(
+                                          data.removeFromCart.cart.items
+                                        );
+                                        setCart(
+                                          quantifiedCakes.map(
+                                            ({
+                                              name,
+                                              price,
+                                              quantity,
+                                              id,
+                                            }) => ({
+                                              name,
+                                              price,
+                                              quantity,
+                                              id,
+                                            })
+                                          )
+                                        );
+                                      });
+                                    }}
+                                    onClickCapture={(e) => e.preventDefault()}
+                                  >
+                                    <Delete />
+                                  </IconButton>
                                 </Tooltip>
                               }
-                            />
-                          </ListItem>
-                        </ListItemButton>
-                      </Link>
-                    );
-                  })}
+                            >
+                              <ListItemText
+                                primary={name}
+                                secondary={
+                                  <Tooltip title={`${quantity} x ${price}`}>
+                                    <span>
+                                      {format({
+                                        decimal: ".",
+                                        round: 2,
+                                        prefix: "$",
+                                      })(quantity * price)}
+                                    </span>
+                                  </Tooltip>
+                                }
+                              />
+                            </ListItem>
+                          </ListItemButton>
+                        </Link>
+                      );
+                    })
+                  ) : (
+                    <ListItem>
+                      <ListItemText primary="Your cart is empty" />
+                    </ListItem>
+                  )}
                 </List>
               </Collapse>
               <ListItemButton
@@ -322,9 +333,13 @@ export const NavBar = () => {
               </ListItemButton>
               <Collapse in={isFavoritesOpen} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  {favorites.map((id) => (
-                    <FavoriteItem id={id} key={id} />
-                  ))}
+                  {favorites.length ? (
+                    favorites.map((id) => <FavoriteItem id={id} key={id} />)
+                  ) : (
+                    <ListItem>
+                      <ListItemText primary="Add cakes to your favorite" />
+                    </ListItem>
+                  )}
                 </List>
               </Collapse>
               <ListItemButton
@@ -340,14 +355,25 @@ export const NavBar = () => {
               </ListItemButton>
               <Collapse in={isOrderOpen} timeout="auto" unmountOnExit>
                 <List component="ul" disablePadding>
-                  {orders ? (
+                  {orders.length ? (
                     orders.map((order, index) => {
-                      return <ListItem key={index}>
-                        <ListItemText primary={format({ decimal: ".", round: 2, prefix: "$" })(order.value)} secondary={order.status}/>
-                      </ListItem>;
+                      return (
+                        <ListItem key={index}>
+                          <ListItemText
+                            primary={format({
+                              decimal: ".",
+                              round: 2,
+                              prefix: "$",
+                            })(order.value)}
+                            secondary={order.createdAt}
+                          />
+                        </ListItem>
+                      );
                     })
                   ) : (
-                    <></>
+                    <ListItem>
+                      <ListItemText primary="You have no pending orders, make an order today" />
+                    </ListItem>
                   )}
                 </List>
               </Collapse>
@@ -432,7 +458,10 @@ export const NavBar = () => {
                   aria-label="show 4 new mails"
                   color="inherit"
                 >
-                  <Badge badgeContent={/* TODO: Implement this */0} color="error">
+                  <Badge
+                    badgeContent={/* TODO: Implement this */ 0}
+                    color="error"
+                  >
                     <Mail />
                   </Badge>
                 </IconButton>

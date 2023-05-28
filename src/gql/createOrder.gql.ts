@@ -9,6 +9,7 @@ mutation Mutation($userId: ID, $input: OrderInput) {
     }
     status
     value
+    createdAt
   }
 }
 `

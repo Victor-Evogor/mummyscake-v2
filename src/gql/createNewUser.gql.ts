@@ -17,6 +17,7 @@ mutation CreateUser($userId: ID) {
       id
       status
       value
+      createdAt
       items {
         id
         name

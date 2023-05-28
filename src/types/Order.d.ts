@@ -6,5 +6,6 @@ export interface OrderType {
         name: string;
         quantity: number;
         price: number
-    }[]
+    }[];
+    createdAt: string
 }
