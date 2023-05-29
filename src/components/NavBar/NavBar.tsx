@@ -82,10 +82,8 @@ const StyledAutoComplete = styled(Autocomplete)(({ theme }) => ({
 }));
 
 const mockOptions = [
-  { label: "cake 1" },
-  { label: "cake 2" },
-  { label: "cake 3" },
-  { label: "cake 4" },
+  { label: "Loading..." },
+  { label: "Loading..." }
 ];
 
 const Search = styled("div")(({ theme }) => ({

@@ -5,7 +5,46 @@ import { useQuery } from "@apollo/client";
 import { GET_CAKE } from "../gql/getCake.gql";
 import { Cake } from "../types/Cake";
 import { CakeDisplay } from "../components/CakeDisplay/CakeDisplay";
-import { Container } from "@mui/material";
+import { Container, Skeleton, Grid, Box } from "@mui/material";
+import { Error } from "../components/ServerError/ServerError";
+
+const Loading = () => {
+  return   <Grid py={2} container columnSpacing={2}>
+    <Grid item xs={4}>
+      <Box sx={{
+        display: "flex",
+        alignItems: "center"
+      }}>
+        <Skeleton variant="circular" width={50} height={50} animation="wave"/>
+      <Box sx={{
+        width: "100%",
+        marginLeft: "10px"
+      }}>
+      <Skeleton variant="text" animation="wave"/>
+      <Skeleton variant="text" width="70%" animation="wave"/>
+      </Box>
+      </Box>
+      <Skeleton variant="rectangular" height={120} sx={{
+        my: "1rem"
+      }} animation="wave"/>
+      <Skeleton variant="text" animation="wave"/>
+    </Grid>
+   <Grid item xs={8}>
+    <Skeleton height={64}/>
+    <Grid container columnSpacing={2}>
+      <Grid item xs={6}>
+        <Skeleton variant="rectangular" height={80}/>
+      </Grid>
+      <Grid item xs={6}>
+      <Skeleton variant="rectangular" height={80}/>
+      </Grid>
+    </Grid>
+    <Skeleton variant="text" width="60%" sx={{
+      marginTop: ".4rem"
+    }}/>
+    </Grid> 
+  </Grid>
+}
 
 export const CakePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,11 +59,11 @@ export const CakePage = () => {
       <NavBar />
       <Container>
         {loading ? (
-          <span>Loading Screen</span>
+          <Loading/>
         ) : error ? (
           <Navigate to="Not found" />
         ) : !data ? (
-          <span>error</span>
+          <Error/>
         ) : (
           <CakeDisplay {...data.getCake} id={id} />
         )}

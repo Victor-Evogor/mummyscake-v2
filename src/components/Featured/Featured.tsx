@@ -24,6 +24,7 @@ import { useFavorite } from "../../hooks/useFavorite";
 import { FAVORITE_CAKE } from "../../gql/favoriteCake.gql";
 import { removeElementAtIndex } from "../../utils/removeElementAtIndex";
 import { UN_FAVORITE_CAKE } from "../../gql/unFavoriteCake.gql";
+import { Error } from "../ServerError/ServerError";
 
 const FeaturedItem: FunctionComponent<Cake> = ({
   name,
@@ -93,7 +94,7 @@ const FeaturedItem: FunctionComponent<Cake> = ({
                         userId: user.uid,
                         favoriteCakeId: id,
                       },
-                    })
+                    });
                   }
                 }}
               >
@@ -116,17 +117,44 @@ const FeaturedItem: FunctionComponent<Cake> = ({
 };
 
 const Loading = () => {
+  const bgcolor = "primary.100"
   return (
     <Grid container spacing={2} py={2}>
-      <Grid item xs={4}></Grid>
-      <Grid item xs={4}></Grid>
-      <Grid item xs={4}></Grid>
-      <Grid item xs={4}></Grid>
-      <Grid item xs={4}></Grid>
-      <Grid item xs={4}></Grid>
+      {(new Array(6)).fill(0).map((_, index)=><Grid item xs={4} key={index}>
+        <Skeleton variant="text" height={40} sx={{
+          bgcolor
+        }} animation="wave"/>
+        <Skeleton variant="text" width="60%" sx={{
+          marginBottom: "1rem",
+          bgcolor
+        }} animation="wave"/>
+        <Skeleton color="#fff" variant="rectangular" width={"100%"} height={150} sx={{
+          bgcolor
+        }} animation="wave"/>
+        <Skeleton variant="text" sx={{
+          marginTop: ".6rem",
+          bgcolor
+        }} animation="wave"/>
+        <Skeleton variant="text" width="40%" sx={{
+          bgcolor
+        }} animation="wave"/>
+        <Box sx={{
+          display: "flex",
+          gap: "5px",
+          alignItems: "center"
+        }}>
+          <Skeleton variant="text" width="40%" height={50} sx={{
+          bgcolor
+        }} animation="wave"/>
+          <Skeleton variant="circular" width={30} height={30} sx={{
+          bgcolor
+        }} animation="wave"/>
+        </Box>
+      </Grid>)}
     </Grid>
   );
 };
+
 
 export const Featured = () => {
   const { data, error, loading } = useQuery<{ getAllCakes: Cake[] }>(
@@ -149,10 +177,12 @@ export const Featured = () => {
         >
           trending cakes you should consider ordering
         </Typography>
-        {loading ? (
-          <span>Loading Page</span>
+        
+        {
+        loading ? (
+          <Loading/>
         ) : error ? (
-          <span>error page</span>
+          <Error/>
         ) : (
           <Grid container spacing={2} py={2}>
             {data?.getAllCakes.map((cake, i) => (
