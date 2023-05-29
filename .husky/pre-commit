@@ -3,10 +3,10 @@
 
 echo '{
     "apollo_server":"https://mummyscake-backend.onrender.com/graphql"
-}' >> src/environment.josn
+}' >> src/environment.json
 
 git add src/environment.json
 
 # npx lint-staged
 
-echo "Working"
+echo "Working from pre commit script"
