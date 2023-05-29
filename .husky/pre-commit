@@ -7,6 +7,6 @@ echo '{
 
 git add src/environment.json
 
-# npx lint-staged
+npx lint-staged
 
-echo "Working from pre commit script"
+echo "HUSKY: Environment variable \`apollo_server\` has been set to the remote server"
