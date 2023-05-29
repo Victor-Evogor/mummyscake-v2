@@ -8,3 +8,4 @@ git restore src/environment.json;
 
 npx lint-staged
 
+echo "Working"
