@@ -41,7 +41,7 @@ const FeaturedItem: FunctionComponent<Cake> = ({
   const [unFavorite] = useMutation(UN_FAVORITE_CAKE);
 
   return (
-    <Grid item xs={4}>
+    <Grid item sm={6} md={4}>
       <Card
         sx={{
           backgroundColor: "white.main",
@@ -61,7 +61,12 @@ const FeaturedItem: FunctionComponent<Cake> = ({
           <Link to={`/cakes/${id}`}>
             <CardMedia image={`/cakes/${image}`} component="img" alt={name} />
           </Link>
-          <Typography minHeight={100} variant="body2" fontSize={"1.2rem"}>
+          <Typography
+            minHeight={100}
+            variant="body2"
+            fontSize={"1.2rem"}
+            marginTop={2}
+          >
             {description}
           </Typography>
           <CardActions>
@@ -117,44 +122,85 @@ const FeaturedItem: FunctionComponent<Cake> = ({
 };
 
 const Loading = () => {
-  const bgcolor = "primary.100"
+  const bgcolor = "primary.100";
   return (
     <Grid container spacing={2} py={2}>
-      {(new Array(6)).fill(0).map((_, index)=><Grid item xs={4} key={index}>
-        <Skeleton variant="text" height={40} sx={{
-          bgcolor
-        }} animation="wave"/>
-        <Skeleton variant="text" width="60%" sx={{
-          marginBottom: "1rem",
-          bgcolor
-        }} animation="wave"/>
-        <Skeleton color="#fff" variant="rectangular" width={"100%"} height={150} sx={{
-          bgcolor
-        }} animation="wave"/>
-        <Skeleton variant="text" sx={{
-          marginTop: ".6rem",
-          bgcolor
-        }} animation="wave"/>
-        <Skeleton variant="text" width="40%" sx={{
-          bgcolor
-        }} animation="wave"/>
-        <Box sx={{
-          display: "flex",
-          gap: "5px",
-          alignItems: "center"
-        }}>
-          <Skeleton variant="text" width="40%" height={50} sx={{
-          bgcolor
-        }} animation="wave"/>
-          <Skeleton variant="circular" width={30} height={30} sx={{
-          bgcolor
-        }} animation="wave"/>
-        </Box>
-      </Grid>)}
+      {new Array(6).fill(0).map((_, index) => (
+        <Grid item xs={4} key={index}>
+          <Skeleton
+            variant="text"
+            height={40}
+            sx={{
+              bgcolor,
+            }}
+            animation="wave"
+          />
+          <Skeleton
+            variant="text"
+            width="60%"
+            sx={{
+              marginBottom: "1rem",
+              bgcolor,
+            }}
+            animation="wave"
+          />
+          <Skeleton
+            color="#fff"
+            variant="rectangular"
+            width={"100%"}
+            height={150}
+            sx={{
+              bgcolor,
+            }}
+            animation="wave"
+          />
+          <Skeleton
+            variant="text"
+            sx={{
+              marginTop: ".6rem",
+              bgcolor,
+            }}
+            animation="wave"
+          />
+          <Skeleton
+            variant="text"
+            width="40%"
+            sx={{
+              bgcolor,
+            }}
+            animation="wave"
+          />
+          <Box
+            sx={{
+              display: "flex",
+              gap: "5px",
+              alignItems: "center",
+            }}
+          >
+            <Skeleton
+              variant="text"
+              width="40%"
+              height={50}
+              sx={{
+                bgcolor,
+              }}
+              animation="wave"
+            />
+            <Skeleton
+              variant="circular"
+              width={30}
+              height={30}
+              sx={{
+                bgcolor,
+              }}
+              animation="wave"
+            />
+          </Box>
+        </Grid>
+      ))}
     </Grid>
   );
 };
-
 
 export const Featured = () => {
   const { data, error, loading } = useQuery<{ getAllCakes: Cake[] }>(
@@ -177,12 +223,11 @@ export const Featured = () => {
         >
           trending cakes you should consider ordering
         </Typography>
-        
-        {
-        loading ? (
-          <Loading/>
+
+        {loading ? (
+          <Loading />
         ) : error ? (
-          <Error/>
+          <Error />
         ) : (
           <Grid container spacing={2} py={2}>
             {data?.getAllCakes.map((cake, i) => (
