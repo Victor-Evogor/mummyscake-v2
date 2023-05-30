@@ -81,10 +81,7 @@ const StyledAutoComplete = styled(Autocomplete)(({ theme }) => ({
   },
 }));
 
-const mockOptions = [
-  { label: "Loading..." },
-  { label: "Loading..." }
-];
+const mockOptions = [{ label: "Loading..." }, { label: "Loading..." }];
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -448,7 +445,15 @@ export const NavBar = () => {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              display: "flex",
+              marginY: {
+                md: 0,
+              },
+              whiteSpace: "pre",
+            }}
+          >
             {user ? (
               <>
                 <IconButton
@@ -487,17 +492,6 @@ export const NavBar = () => {
                 </Button>
               </Link>
             )}
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-haspopup="true"
-              onClick={() => undefined}
-              color="inherit"
-            >
-              <More />
-            </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
