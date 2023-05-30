@@ -5,4 +5,3 @@ echo '{
     "apollo_server":"http://localhost:8080/graphql"
 }' > src/environment.json
 
-echo "Post commit script ran"
