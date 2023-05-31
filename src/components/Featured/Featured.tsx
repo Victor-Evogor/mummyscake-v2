@@ -126,7 +126,7 @@ const Loading = () => {
   return (
     <Grid container spacing={2} py={2}>
       {new Array(6).fill(0).map((_, index) => (
-        <Grid item xs={4} key={index}>
+        <Grid item xs={12} sm={6} md={4} key={index}>
           <Skeleton
             variant="text"
             height={40}
