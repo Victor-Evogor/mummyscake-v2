@@ -87,7 +87,7 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
 
   return (
     <Grid py={2} container>
-      <Grid item xs={4}>
+      <Grid item md={4}>
         <Card sx={{ width: "100%" }}>
           <CardHeader
             avatar={
@@ -146,7 +146,7 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
                       userId: user.uid,
                       favoriteCakeId: id,
                     },
-                  })
+                  });
                 }
               }}
             >
@@ -272,12 +272,16 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
           </Collapse>
         </Card>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item md={8}>
         <Container>
           <AppBar
             position="static"
             sx={{
               borderRadius: "1rem",
+              marginTop: {
+                xs: 2,
+                md: 0,
+              },
             }}
           >
             <Toolbar
@@ -305,11 +309,11 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
                       data.addToCart.cart.items
                     );
                     setCart(
-                      quantifiedCakes.map(({ name, price, quantity, id}) => ({
+                      quantifiedCakes.map(({ name, price, quantity, id }) => ({
                         name,
                         price,
                         quantity,
-                        id
+                        id,
                       }))
                     );
                     toast.info(`${name} has been added to your cart`, {
@@ -322,9 +326,19 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
               </Button>
             </Toolbar>
           </AppBar>
-          <Grid container spacing={2} py={2}>
+          <Grid
+            container
+            spacing={2}
+            py={2}
+            sx={{
+              justifyContent: {
+                xs: "flex-end",
+                md: "initial",
+              },
+            }}
+          >
             {reviews.map(({ comment, user }, index) => (
-              <Grid item key={index} xs={Math.floor(12 / reviews.length)}>
+              <Grid item key={index} md={Math.floor(12 / reviews.length)}>
                 <Paper
                   key={index}
                   elevation={2}
