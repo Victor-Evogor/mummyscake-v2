@@ -218,7 +218,9 @@ export const NavBar = () => {
                 }}
               >
                 {user?.displayName?.split(" ")[0][0]}
-                {user?.displayName?.split(" ")[1][0]}
+                {user?.displayName?.split(" ")[1]
+                  ? user?.displayName?.split(" ")[1][0]
+                  : user?.displayName?.split(" ")[0][1]}
               </Avatar>
             )}
             <List>
