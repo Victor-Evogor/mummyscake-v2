@@ -18,3 +18,26 @@
         background-size: 200%;
     }
 }
+
+@keyframes movie-responsive {
+    0% {
+        background-position: 0% 0%;
+        background-size: 300%;
+    }
+
+    50%{
+        background-position: 100% 100%;
+        background-size: 200%;
+    }
+
+    100%{
+        background-position: 0% 0%;
+        background-size: 300%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .hero {
+        animation: movie-responsive 120s infinite linear !important;
+    }
+}
