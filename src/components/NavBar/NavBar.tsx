@@ -27,7 +27,6 @@ import {
   ExpandMore,
   Mail,
   Menu,
-  More,
   Search as SearchIcon,
   ShoppingCart,
   Delete,
@@ -176,7 +175,10 @@ export const NavBar = () => {
       >
         <Box
           sx={{
-            width: "24rem",
+            width: {
+              md: "24rem",
+              xs: "80vw",
+            },
             py: "1.3rem",
           }}
         >
