@@ -12,8 +12,8 @@ import {
   TableCell,
   ListItem,
   List,
-  Link,
   useTheme,
+  Link,
   useMediaQuery,
 } from "@mui/material";
 import { Box, styled } from "@mui/system";
@@ -25,6 +25,7 @@ import {
   Instagram,
   LinkedIn,
 } from "@mui/icons-material";
+// import { Link } from "react-router-dom"
 
 const TableContainer = styled(TableCon)({
   overflowX: "auto", // Enable horizontal scrolling for small screens
@@ -106,7 +107,9 @@ const FooterTableSm = () => {
           fontWeight: "bold",
         }}
       >
-        Mummy&apos;s Cake
+        <Link href="/" underline="none">
+          Mummy&apos;s Cake
+        </Link>
       </Typography>
       <Typography variant="subtitle1">
         Satisfy your sweet tooth cravings with just a click - we&apos;ll deliver
