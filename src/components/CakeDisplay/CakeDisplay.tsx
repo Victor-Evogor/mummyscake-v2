@@ -295,6 +295,7 @@ export const CakeDisplay: FunctionComponent<Cake> = ({
                 endIcon={<ShoppingCart />}
                 variant="contained"
                 color="secondary"
+                data-test-id="add-to-cart"
                 onClick={() => {
                   if (!user) return navigate("/log-in");
 

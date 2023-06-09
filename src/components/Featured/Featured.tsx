@@ -71,7 +71,9 @@ const FeaturedItem: FunctionComponent<Cake> = ({
           </Typography>
           <CardActions>
             <Link to={`/cakes/${id}`}>
-              <Button variant="contained">View More</Button>
+              <Button variant="contained" data-test-id="view-more">
+                View More
+              </Button>
             </Link>
             <Tooltip title="Add to favorite">
               <IconButton
@@ -229,7 +231,13 @@ export const Featured = () => {
         ) : error ? (
           <Error />
         ) : (
-          <Grid container spacing={2} py={2}>
+          <Grid
+            container
+            spacing={2}
+            py={2}
+            data-test-id="featured-cakes-container"
+            component="div"
+          >
             {data?.getAllCakes.map((cake, i) => (
               <FeaturedItem key={i} {...cake} />
             ))}

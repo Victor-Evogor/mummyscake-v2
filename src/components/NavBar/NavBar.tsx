@@ -185,7 +185,10 @@ export const NavBar = () => {
           <Container>
             <Typography textAlign={"right"} gutterBottom>
               <Tooltip title={"Proceed to checkout"}>
-                <Button onClick={() => navigate("/order")}>
+                <Button
+                  onClick={() => navigate("/order")}
+                  data-test-id="proceed-to-checkout"
+                >
                   cart value:{" "}
                   {format({ decimal: ".", round: 2, prefix: "$" })(
                     (cart as Pick<CartItem, "price" | "quantity">[]).reduce(
@@ -383,6 +386,7 @@ export const NavBar = () => {
                 setIsDrawerOpen(false);
                 signOut(auth);
               }}
+              data-test-id="log-out"
             >
               Sign Out
             </Button>
@@ -397,6 +401,7 @@ export const NavBar = () => {
               edge="start"
               color="inherit"
               aria-label="open drawer"
+              data-test-id="drawer-btn"
               sx={{ mr: 2 }}
               onClick={() => {
                 setIsDrawerOpen(true);
@@ -491,6 +496,7 @@ export const NavBar = () => {
                     color: "white.main",
                     borderColor: "white.main",
                   }}
+                  data-test-id="log-in"
                 >
                   Log In
                 </Button>

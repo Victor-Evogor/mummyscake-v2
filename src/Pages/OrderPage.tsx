@@ -77,6 +77,7 @@ export const OrderPage = () => {
             >
               <Button
                 variant="contained"
+                data-test-id="proceed-checkout"
                 onClick={() => {
                   createOrder({
                     variables: {

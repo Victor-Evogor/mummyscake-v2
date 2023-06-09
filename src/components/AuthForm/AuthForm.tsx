@@ -253,11 +253,16 @@ export const AuthForm: FunctionComponent<Props> = ({ type, onSubmit }) => {
             {type === "sign in" ? (
               <span>
                 Don&apos;t have an account?{" "}
-                <Link to="/create-account">create an account</Link>
+                <Link to="/create-account" data-test-id="create-an-account">
+                  create an account
+                </Link>
               </span>
             ) : (
               <span>
-                Have an account? <Link to="/log-in">Sign In</Link>
+                Have an account?{" "}
+                <Link to="/log-in" data-test-id="sign-in">
+                  Sign In
+                </Link>
               </span>
             )}
           </Typography>
