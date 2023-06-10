@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "npx testcafe chrome e2e",
+    "test": "npx testcafe chrome:headless e2e",
     "dev:firebase": "firebase emulators:start",
     "prepare": "husky install",
     "pre-commit": "bash pre-commit"
