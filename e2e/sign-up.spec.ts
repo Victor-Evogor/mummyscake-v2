@@ -1,11 +1,13 @@
 import { fixture, test, Selector } from "testcafe";
 import { faker } from "@faker-js/faker";
-if (!process.env.URL) {
+/* if (!process.env.URL) {
   console.error("Testing Url not provided");
   process.exit(1);
-}
+} */
 
-fixture("Home page functionality").page(process.env.URL);
+fixture("Home page functionality").page(
+  process.env.URL || "https://mummyscake.onrender.com"
+);
 
 const email = `test-${faker.name.firstName()}@${faker.animal.rabbit()}.com`;
 const password = faker.word.noun({
