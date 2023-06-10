@@ -1,11 +1,14 @@
-import { Box } from "@mui/material"
-import Lottie from "react-lottie"
-import serverError from "../../lotties/internal-server-error.json"
+import { Box } from "@mui/material";
+import { useLottie } from "lottie-react";
+import serverError from "../../lotties/internal-server-error.json";
 
 export const Error = () => {
-    return <Box>
-      <Lottie options={{
-        animationData: serverError
-      }}/>
+  const { View } = useLottie({
+    animationData: serverError,
+  });
+  return (
+    <Box>
+      <>{View}</>
     </Box>
-  }
+  );
+};
