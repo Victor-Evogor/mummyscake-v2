@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "URL=https://mummyscake.onrender.com testcafe chrome:headless e2e",
+    "test": "URL=https://mummyscake.onrender.com npx testcafe chrome:headless e2e",
     "dev:test": "URL=http://localhost:5173 npx testcafe chrome:headless e2e",
     "dev:firebase": "firebase emulators:start",
     "prepare": "husky install",
