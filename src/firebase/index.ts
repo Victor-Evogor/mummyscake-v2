@@ -9,7 +9,7 @@ import {
   onAuthStateChanged,
   signInWithPopup,
   GoogleAuthProvider,
-  connectAuthEmulator,
+  // connectAuthEmulator,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -32,7 +32,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const googleAuth = new GoogleAuthProvider();
 
-connectAuthEmulator(auth, "http://127.0.0.1:9099");
+// connectAuthEmulator(auth, "http://127.0.0.1:9099");
 
 export const signIn = (email: string, password: string) =>
   signInWithEmailAndPassword(auth, email, password);
